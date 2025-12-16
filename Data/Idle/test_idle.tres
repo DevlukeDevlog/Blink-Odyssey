@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="IdleTemplate" load_steps=2 format=3 uid="uid://cbkh5ymgl2gjt"]
+
+[ext_resource type="Script" uid="uid://qlful1ygh1j8" path="res://Scripts/Resources/idle_template.gd" id="1_0rda0"]
+
+[resource]
+script = ExtResource("1_0rda0")
+idle_name = "Test Idle"
+idle_base_power = 10
+idle_base_upgrade_cost = 50
+metadata/_custom_type_script = "uid://qlful1ygh1j8"

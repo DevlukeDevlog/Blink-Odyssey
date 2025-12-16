@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EnemyTemplate" load_steps=2 format=3 uid="uid://dwcy7rj7y4ygp"]
+
+[ext_resource type="Script" uid="uid://bnb77ygf1dd3i" path="res://Scripts/Resources/enemy_template.gd" id="1_hrwtf"]
+
+[resource]
+script = ExtResource("1_hrwtf")
+enemy_type = 1
+enemy_name = "Test Boss"
+enemy_base_max_health = 100
+enemy_weakness = 0
+enemy_base_min_reward = 100
+enemy_timer = 100
+metadata/_custom_type_script = "uid://bnb77ygf1dd3i"
