@@ -14,6 +14,10 @@ config/name="Blink Odyssey"
 run/main_scene="uid://bvy50pyfmcs3v"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 
+[autoload]
+
+DataManager="*res://Scripts/Managers/data_manager.gd"
+
 [display]
 
 window/stretch/mode="canvas_items"

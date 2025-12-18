@@ -7,7 +7,7 @@
 script = ExtResource("1_adgvk")
 enemy_type = 0
 enemy_name = "Test 2"
-enemy_base_max_health = 10
+enemy_base_max_health = 5
 enemy_weakness = 0
 enemy_base_min_reward = 10
 enemy_timer = 0

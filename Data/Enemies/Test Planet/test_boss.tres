@@ -7,7 +7,7 @@
 script = ExtResource("1_hrwtf")
 enemy_type = 1
 enemy_name = "Test Boss"
-enemy_base_max_health = 100
+enemy_base_max_health = 10
 enemy_weakness = 0
 enemy_base_min_reward = 100
 enemy_timer = 100

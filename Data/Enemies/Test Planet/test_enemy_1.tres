@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1_jaodq")
 enemy_type = 0
-enemy_name = "Enemy Name"
-enemy_base_max_health = 10
+enemy_name = "Test 1"
+enemy_base_max_health = 5
 enemy_weakness = 0
 enemy_base_min_reward = 10
 enemy_timer = 0
