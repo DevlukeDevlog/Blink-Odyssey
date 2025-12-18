@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="EnemyTemplate" load_steps=2 format=3 uid="uid://ba1eugfyk8elt"]
+[gd_resource type="Resource" script_class="EnemyTemplate" load_steps=3 format=3 uid="uid://ba1eugfyk8elt"]
 
+[ext_resource type="Texture2D" uid="uid://bcycsfoka5ofu" path="res://Assets/Art/Test/enemy_placeholder_2.png" id="1_a4kwg"]
 [ext_resource type="Script" uid="uid://bnb77ygf1dd3i" path="res://Scripts/Resources/enemy_template.gd" id="1_nev4l"]
 
 [resource]
@@ -10,4 +11,5 @@ enemy_base_max_health = 10
 enemy_weakness = 0
 enemy_base_min_reward = 10
 enemy_timer = 0
+enemy_texture = ExtResource("1_a4kwg")
 metadata/_custom_type_script = "uid://bnb77ygf1dd3i"

@@ -14,15 +14,25 @@ config/name="Blink Odyssey"
 run/main_scene="uid://bvy50pyfmcs3v"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 
+[display]
+
+window/stretch/mode="canvas_items"
+
 [file_customization]
 
 folder_colors={
+"res://Assets/": "red",
 "res://Data/": "pink",
 "res://Scenes/": "blue",
 "res://Scripts/": "teal"
 }
 
+[gui]
+
+theme/custom_font="uid://dt2r8hvmcxm2"
+
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
