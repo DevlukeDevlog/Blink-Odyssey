@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bvy50pyfmcs3v"]
+[gd_scene load_steps=10 format=3 uid="uid://bvy50pyfmcs3v"]
 
 [ext_resource type="Texture2D" uid="uid://be0u4714bpo2s" path="res://Assets/Art/Test/player_placeholder.png" id="1_52fb6"]
 [ext_resource type="FontFile" uid="uid://b6ruw17j2xoxj" path="res://Assets/Fonts/AndyBold.OTF" id="1_iacmt"]
@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://c3a7gfpbevcxy" path="res://Data/Missions/planet_1.tres" id="2_huasi"]
 [ext_resource type="Texture2D" uid="uid://twydswvdv708" path="res://Assets/Art/Test/background_placeholder.png" id="3_jv6wh"]
 [ext_resource type="Texture2D" uid="uid://dpg4o5v1ib18h" path="res://Assets/Art/Test/enemy_placeholder_1.png" id="4_x6ack"]
+[ext_resource type="Theme" uid="uid://6d11oaqdfr8f" path="res://Assets/Themes/button_placeholder.tres" id="6_huasi"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ia5b"]
 
@@ -163,6 +164,8 @@ layout_mode = 2
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
+focus_mode = 0
+theme = ExtResource("6_huasi")
 theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 24
 text = "New Mission"
@@ -194,6 +197,8 @@ layout_mode = 2
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
+focus_mode = 0
+theme = ExtResource("6_huasi")
 theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 24
 text = "Inventory"
@@ -270,6 +275,7 @@ show_percentage = false
 unique_name_in_owner = true
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
+focus_mode = 0
 
 [node name="RightBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(175, 0)
@@ -290,6 +296,8 @@ theme_override_constants/margin_bottom = 8
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
+focus_mode = 0
+theme = ExtResource("6_huasi")
 theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 16
 text = "Options"
@@ -354,6 +362,8 @@ unique_name_in_owner = true
 texture_filter = 2
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+focus_mode = 0
+theme = ExtResource("6_huasi")
 theme_override_fonts/font = ExtResource("1_iacmt")
 text = "NeoForge"
 
