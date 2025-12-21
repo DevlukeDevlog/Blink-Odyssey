@@ -1,7 +1,10 @@
-[gd_resource type="Resource" script_class="EnemyTemplate" load_steps=3 format=3 uid="uid://cfh88dl2a2fti"]
+[gd_resource type="Resource" script_class="EnemyTemplate" load_steps=6 format=3 uid="uid://cfh88dl2a2fti"]
 
 [ext_resource type="Script" uid="uid://bnb77ygf1dd3i" path="res://Scripts/Resources/enemy_template.gd" id="1_adgvk"]
+[ext_resource type="Script" uid="uid://bc56friqt0408" path="res://Scripts/Resources/equipment_template.gd" id="1_ndg48"]
 [ext_resource type="Texture2D" uid="uid://bcycsfoka5ofu" path="res://Assets/Art/Test/enemy_placeholder_2.png" id="1_uqqn3"]
+[ext_resource type="Resource" uid="uid://bi5g5w2rc14c7" path="res://Data/Equipment/Helmets/test_helmet.tres" id="2_c8p84"]
+[ext_resource type="Resource" uid="uid://fl77yj6auwap" path="res://Data/Equipment/Boots/test_boot.tres" id="3_msf3c"]
 
 [resource]
 script = ExtResource("1_adgvk")
@@ -10,6 +13,7 @@ enemy_name = "Test 2"
 enemy_base_max_health = 5
 enemy_weakness = 0
 enemy_base_min_reward = 10
+enemy_possible_equipment_drops = Array[ExtResource("1_ndg48")]([ExtResource("2_c8p84"), ExtResource("3_msf3c")])
 enemy_timer = 0
 enemy_texture = ExtResource("1_uqqn3")
 metadata/_custom_type_script = "uid://bnb77ygf1dd3i"

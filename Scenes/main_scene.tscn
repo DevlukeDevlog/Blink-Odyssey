@@ -1,13 +1,16 @@
-[gd_scene load_steps=10 format=3 uid="uid://bvy50pyfmcs3v"]
+[gd_scene load_steps=13 format=3 uid="uid://bvy50pyfmcs3v"]
 
 [ext_resource type="Texture2D" uid="uid://be0u4714bpo2s" path="res://Assets/Art/Test/player_placeholder.png" id="1_52fb6"]
 [ext_resource type="FontFile" uid="uid://b6ruw17j2xoxj" path="res://Assets/Fonts/AndyBold.OTF" id="1_iacmt"]
 [ext_resource type="Script" uid="uid://ckmiv6sa03ak2" path="res://Scripts/Systems/main_game_system.gd" id="1_maf8m"]
-[ext_resource type="Texture2D" uid="uid://bbax887jj4tej" path="res://Assets/Art/Test/equipment_icon_placeholder.png" id="2_6l7je"]
 [ext_resource type="Resource" uid="uid://c3a7gfpbevcxy" path="res://Data/Missions/planet_1.tres" id="2_huasi"]
+[ext_resource type="Theme" uid="uid://chweu1s0cwtc7" path="res://Assets/Themes/panel_placeholder.tres" id="3_76v2p"]
 [ext_resource type="Texture2D" uid="uid://twydswvdv708" path="res://Assets/Art/Test/background_placeholder.png" id="3_jv6wh"]
 [ext_resource type="Texture2D" uid="uid://dpg4o5v1ib18h" path="res://Assets/Art/Test/enemy_placeholder_1.png" id="4_x6ack"]
+[ext_resource type="Texture2D" uid="uid://dkoy7rxrlpl1j" path="res://Assets/Art/Test/equipment_slot_icon_placeholder.png" id="5_m1efj"]
 [ext_resource type="Theme" uid="uid://6d11oaqdfr8f" path="res://Assets/Themes/button_placeholder.tres" id="6_huasi"]
+[ext_resource type="FontFile" uid="uid://dt2r8hvmcxm2" path="res://Assets/Fonts/AndyRegular.OTF" id="9_m1efj"]
+[ext_resource type="PackedScene" uid="uid://dlyf3e0iv77o2" path="res://Scenes/Components/equipment_slot.tscn" id="9_mai8y"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ia5b"]
 
@@ -45,6 +48,7 @@ theme_override_constants/margin_bottom = 100
 
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/MarginContainer"]
 layout_mode = 2
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_2ia5b")
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer"]
@@ -71,6 +75,7 @@ theme_override_constants/separation = 8
 [node name="PlayerInformationBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+theme = ExtResource("3_76v2p")
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox"]
 layout_mode = 2
@@ -96,6 +101,7 @@ size_flags_horizontal = 3
 [node name="Label" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/PlayerInfoContainer/CharacterStats"]
 texture_filter = 2
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 24
 text = "Character"
@@ -104,6 +110,7 @@ text = "Character"
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 16
 text = "Lv: 12"
 
@@ -111,6 +118,7 @@ text = "Lv: 12"
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 16
 text = "Power: 35K"
 
@@ -122,6 +130,7 @@ expand_mode = 3
 stretch_mode = 4
 
 [node name="GearContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_constants/separation = 8
@@ -130,25 +139,26 @@ alignment = 1
 [node name="HelmetIcon" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/GearContainer"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-texture = ExtResource("2_6l7je")
+texture = ExtResource("5_m1efj")
 
 [node name="SuitIcon" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/GearContainer"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-texture = ExtResource("2_6l7je")
+texture = ExtResource("5_m1efj")
 
 [node name="BootIcon" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/GearContainer"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-texture = ExtResource("2_6l7je")
+texture = ExtResource("5_m1efj")
 
 [node name="WeaponIcon" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/GearContainer"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-texture = ExtResource("2_6l7je")
+texture = ExtResource("5_m1efj")
 
 [node name="MissionBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_76v2p")
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/MissionBox"]
 layout_mode = 2
@@ -175,6 +185,7 @@ unique_name_in_owner = true
 texture_filter = 2
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 16
 text = "Planet 1"
 horizontal_alignment = 1
@@ -182,6 +193,7 @@ vertical_alignment = 1
 
 [node name="InventoryBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_76v2p")
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/InventoryBox"]
 layout_mode = 2
@@ -208,61 +220,70 @@ unique_name_in_owner = true
 texture_filter = 2
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 16
 text = "16 Items"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CenterBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="ClickerScene" type="BoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CenterBoxContainer"]
+[node name="CenterBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EnemyBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+theme = ExtResource("3_76v2p")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CenterBoxContainer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="BackgroundTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CenterBoxContainer/PanelContainer/MarginContainer"]
+[node name="BackgroundTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer"]
 layout_mode = 2
 texture = ExtResource("3_jv6wh")
-expand_mode = 3
 stretch_mode = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CenterBoxContainer/PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CenterBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="EnemyNameLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CenterBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="EnemyNameLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iacmt")
 text = "Grifindor"
 
-[node name="MissionProgressLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CenterBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="MissionProgressLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iacmt")
 text = "0 / 10"
 horizontal_alignment = 2
 
-[node name="EnemyTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CenterBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="EnemyTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 texture = ExtResource("4_x6ack")
 expand_mode = 5
 
-[node name="EnemyHealthBar" type="ProgressBar" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CenterBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="EnemyHealthBar" type="ProgressBar" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
@@ -271,28 +292,29 @@ step = 1.0
 value = 50.0
 show_percentage = false
 
-[node name="AttackButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CenterBoxContainer/PanelContainer/MarginContainer"]
+[node name="AttackButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer"]
 unique_name_in_owner = true
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 focus_mode = 0
 
-[node name="RightBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="RightBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene"]
 custom_minimum_size = Vector2(175, 0)
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="SettingsBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/RightBoxContainer"]
+[node name="SettingsBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_76v2p")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/RightBoxContainer/SettingsBox"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer/SettingsBox"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="OptionsButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/RightBoxContainer/SettingsBox/MarginContainer"]
+[node name="OptionsButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer/SettingsBox/MarginContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
@@ -302,33 +324,37 @@ theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 16
 text = "Options"
 
-[node name="LogBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/RightBoxContainer"]
+[node name="LogBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+theme = ExtResource("3_76v2p")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/RightBoxContainer/LogBox"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer/LogBox"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/RightBoxContainer/LogBox/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer/LogBox/MarginContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/RightBoxContainer/LogBox/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer/LogBox/MarginContainer/VBoxContainer"]
 texture_filter = 2
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 24
 text = "Mission Log"
 
-[node name="MissionLogLabel" type="RichTextLabel" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/RightBoxContainer/LogBox/MarginContainer/VBoxContainer"]
+[node name="MissionLogLabel" type="RichTextLabel" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer/LogBox/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_colors/default_color = Color(0, 0, 0, 1)
 theme_override_constants/line_separation = 8
+theme_override_fonts/normal_font = ExtResource("9_m1efj")
 text = "- Found weapon
 - Gained 512 Gold
 - Defeated enemy
@@ -346,6 +372,145 @@ text = "- Found weapon
 
 "
 
+[node name="InventoryScene" type="BoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="UpBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="OpenInventoryBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("3_76v2p")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="EquipmentGridContainer" type="GridContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 12
+
+[node name="EquipmentSlot" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot2" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot3" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot4" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot5" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot6" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot7" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot8" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot9" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot10" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot11" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot12" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="DownBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="InfoEquipmentBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("3_76v2p")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="SelectedEquipmentLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+texture_filter = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 24
+text = "Test Helmet"
+
+[node name="SelectedEquipmentInformationLabel" type="RichTextLabel" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+texture_filter = 2
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_constants/line_separation = 8
+theme_override_fonts/normal_font = ExtResource("9_m1efj")
+bbcode_enabled = true
+text = "+ 200 Power"
+scroll_active = false
+
+[node name="ActionsInventoryContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SellButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer"]
+texture_filter = 2
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("6_huasi")
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 16
+text = "Sell"
+
+[node name="EquipButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer"]
+texture_filter = 2
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("6_huasi")
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 16
+text = "Equip"
+
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
@@ -354,6 +519,7 @@ unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iacmt")
 text = "100 Gold"
 
@@ -369,6 +535,8 @@ text = "NeoForge"
 
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/MissionBox/MarginContainer/VBoxContainer/MissionSelectButton" to="." method="_on_mission_select_button_pressed"]
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/InventoryBox/MarginContainer/VBoxContainer/InventoryOpenButton" to="." method="_on_inventory_open_button_pressed"]
-[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CenterBoxContainer/PanelContainer/MarginContainer/AttackButton" to="." method="_on_attack_button_pressed"]
-[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/RightBoxContainer/SettingsBox/MarginContainer/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton" to="." method="_on_attack_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer/SettingsBox/MarginContainer/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer/SellButton" to="." method="_on_sell_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer/EquipButton" to="." method="_on_equip_button_pressed"]
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/UpgradeButton" to="." method="_on_upgrade_button_pressed"]

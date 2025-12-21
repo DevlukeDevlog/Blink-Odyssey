@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://dlyf3e0iv77o2"]
+
+[ext_resource type="Script" uid="uid://cvu1voy0pomo8" path="res://Scripts/Components/equipment_slot.gd" id="1_6qcv3"]
+[ext_resource type="Texture2D" uid="uid://dkoy7rxrlpl1j" path="res://Assets/Art/Test/equipment_slot_icon_placeholder.png" id="1_hni86"]
+[ext_resource type="Texture2D" uid="uid://b7ffce0emnjpx" path="res://Assets/Art/Test/equipment_slot_active_icon_placeholder.png" id="2_7uu3d"]
+[ext_resource type="Texture2D" uid="uid://bty3wf87usjom" path="res://Assets/Art/Test/equipment_slot_hover_icon_placeholder.png" id="2_adhjb"]
+
+[node name="EquipmentSlot" type="TextureButton"]
+custom_minimum_size = Vector2(32, 32)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1152.0
+offset_bottom = -648.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("1_hni86")
+texture_pressed = ExtResource("2_7uu3d")
+texture_hover = ExtResource("2_adhjb")
+texture_disabled = ExtResource("2_7uu3d")
+script = ExtResource("1_6qcv3")
+
+[node name="EquipmentIcon" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

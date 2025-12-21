@@ -17,6 +17,8 @@ config/features=PackedStringArray("4.4", "GL Compatibility")
 [autoload]
 
 DataManager="*res://Scripts/Managers/data_manager.gd"
+ComponentsManager="*res://Scripts/Managers/components_manager.gd"
+SceneManager="*res://Scripts/Managers/scene_manager.gd"
 
 [display]
 
