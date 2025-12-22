@@ -25,6 +25,7 @@ extends Control
 @onready var inventory_open_button = %InventoryOpenButton
 @onready var equipment_grid_container = %EquipmentGridContainer
 @onready var actions_inventory_container = %ActionsInventoryContainer
+@onready var equip_button = %EquipButton
 
 # Scenes
 @onready var clicker_scene = %ClickerScene
@@ -60,6 +61,7 @@ func _setup_game() -> void:
 func _setup_signals() -> void:
 	DataManager.update_ui.connect(_update_game_ui)
 	DataManager.update_ui.connect(_update_player_ui)
+	DataManager.update_ui.connect(_update_gear_ui)
 	DataManager.update_ui.connect(_update_inventory_ui)
 	DataManager.update_ui.connect(_update_selected_equiment_ui)
 
@@ -89,8 +91,8 @@ func _update_enemy_ui() -> void:
 		mission_progress_label.text = str(current_mission_progress, " / ", mission.Get_Mission_Size())
 
 func _update_player_ui() -> void:
-	level_label.text = str("Lv: ", DataManager.current_player_lv)
-	power_label.text = str("Power: ", DataManager.current_player_power)
+	level_label.text = str("Lv: ", DataManager.Get("level"))
+	power_label.text = str("Power: ", DataManager.Get("power"))
 
 func _update_gear_ui() -> void:
 	var gear_slots = gear_container.get_children()
@@ -111,6 +113,7 @@ func _update_inventory_ui() -> void:
 		var new_equipment_slot: EquipmentSLot = ComponentsManager.EQUIPMENT_SLOT.instantiate()
 		new_equipment_slot.equipment = equipment
 		new_equipment_slot.in_inventory = true
+		new_equipment_slot.is_equiped = DataManager.Is_Equiped(equipment)
 		equipment_grid_container.add_child(new_equipment_slot)
 
 func _update_selected_equiment_ui(selected_equipment: EquipmentTemplate = null) -> void:
@@ -125,7 +128,20 @@ func _update_selected_equiment_ui(selected_equipment: EquipmentTemplate = null) 
 	else:
 		_selected_equipment = selected_equipment
 		selected_equipment_label.text = _selected_equipment.equipment_name
-		selected_equipment_information_label.text = str(_selected_equipment.equipment_current_attack_power, " Power")
+		
+		var improved_power_text := ""
+		
+		if (!DataManager.Is_Equiped(_selected_equipment)):
+			equip_button.text = "Equip"
+			var improved_power := DataManager.Calculate_Improved_Power(_selected_equipment)
+			if (improved_power < 0):
+				improved_power_text = str("[color=#B3261E]",improved_power ," Once Equipped[/color]")
+			else:
+				improved_power_text = str("[color=#1F7A1F]+",improved_power ," Once Equipped[/color]")
+		else:
+			equip_button.text = "Unequip"
+		
+		selected_equipment_information_label.text = str(_selected_equipment.equipment_current_attack_power, " Power\n", improved_power_text)
 		actions_inventory_container.visible = true
 
 func _update_game_ui() -> void:
@@ -162,7 +178,7 @@ func _on_upgrade_button_pressed() -> void:
 
 func _on_attack_button_pressed() -> void:
 	if (_current_enemy and !_mission_completed):
-		_current_enemy.Take_Damage(DataManager.current_player_power)
+		_current_enemy.Take_Damage(DataManager.Get("power"))
 		
 		if (_current_enemy.Is_Defeated()):
 			var enemies := _current_mission.mission_enemies
@@ -206,4 +222,7 @@ func _on_sell_button_pressed():
 	_selected_equipment = null
 
 func _on_equip_button_pressed():
-	pass # Replace with function body.
+	if (DataManager.Is_Equiped(_selected_equipment)):
+		DataManager.Remove_Gear(_selected_equipment)
+	else:
+		DataManager.Set_Gear(_selected_equipment)
