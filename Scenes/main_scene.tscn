@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bvy50pyfmcs3v"]
+[gd_scene load_steps=15 format=3 uid="uid://bvy50pyfmcs3v"]
 
 [ext_resource type="Texture2D" uid="uid://be0u4714bpo2s" path="res://Assets/Art/Test/player_placeholder.png" id="1_52fb6"]
 [ext_resource type="FontFile" uid="uid://b6ruw17j2xoxj" path="res://Assets/Fonts/AndyBold.OTF" id="1_iacmt"]
@@ -11,6 +11,8 @@
 [ext_resource type="Theme" uid="uid://6d11oaqdfr8f" path="res://Assets/Themes/button_placeholder.tres" id="6_huasi"]
 [ext_resource type="FontFile" uid="uid://dt2r8hvmcxm2" path="res://Assets/Fonts/AndyRegular.OTF" id="9_m1efj"]
 [ext_resource type="PackedScene" uid="uid://dlyf3e0iv77o2" path="res://Scenes/Components/equipment_slot.tscn" id="9_mai8y"]
+[ext_resource type="PackedScene" uid="uid://d0s0ljl3yflo0" path="res://Scenes/Components/upgrade_slot.tscn" id="12_drdnd"]
+[ext_resource type="Script" uid="uid://dmrxncry7byct" path="res://Scripts/Systems/upgrade_system.gd" id="12_ioaeq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ia5b"]
 
@@ -41,10 +43,10 @@ layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 175
+theme_override_constants/margin_left = 75
 theme_override_constants/margin_top = 50
-theme_override_constants/margin_right = 175
-theme_override_constants/margin_bottom = 100
+theme_override_constants/margin_right = 75
+theme_override_constants/margin_bottom = 80
 
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/MarginContainer"]
 layout_mode = 2
@@ -62,45 +64,47 @@ theme_override_constants/margin_bottom = 8
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="GamePlayScene" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 8
+theme_override_constants/separation = 16
 
-[node name="LeftBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="LeftBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_constants/separation = 8
 
-[node name="PlayerInformationBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer"]
+[node name="PlayerInformationBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("3_76v2p")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/PlayerInformationBox"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/PlayerInformationBox/MarginContainer"]
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="PlayerInfoContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer"]
+[node name="PlayerInfoContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="CharacterStats" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/PlayerInfoContainer"]
+[node name="CharacterStats" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/PlayerInfoContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/PlayerInfoContainer/CharacterStats"]
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/PlayerInfoContainer/CharacterStats"]
 texture_filter = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -108,7 +112,7 @@ theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 24
 text = "Character"
 
-[node name="LevelLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/PlayerInfoContainer/CharacterStats"]
+[node name="LevelLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/PlayerInfoContainer/CharacterStats"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
@@ -116,7 +120,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 16
 text = "Lv: 12"
 
-[node name="PowerLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/PlayerInfoContainer/CharacterStats"]
+[node name="PowerLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/PlayerInfoContainer/CharacterStats"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
@@ -124,55 +128,57 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 16
 text = "Power: 35K"
 
-[node name="CharacterIcon" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/PlayerInfoContainer"]
+[node name="CharacterIcon" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/PlayerInfoContainer"]
+custom_minimum_size = Vector2(0, 140)
 layout_mode = 2
 size_flags_horizontal = 8
+size_flags_vertical = 0
 texture = ExtResource("1_52fb6")
 expand_mode = 3
 stretch_mode = 4
 
-[node name="GearContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer"]
+[node name="GearContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="HelmetIcon" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/GearContainer"]
+[node name="HelmetIcon" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/GearContainer"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 texture = ExtResource("5_m1efj")
 
-[node name="SuitIcon" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/GearContainer"]
+[node name="SuitIcon" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/GearContainer"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 texture = ExtResource("5_m1efj")
 
-[node name="BootIcon" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/GearContainer"]
+[node name="BootIcon" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/GearContainer"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 texture = ExtResource("5_m1efj")
 
-[node name="WeaponIcon" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/GearContainer"]
+[node name="WeaponIcon" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/PlayerInformationBox/MarginContainer/VBoxContainer/GearContainer"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 texture = ExtResource("5_m1efj")
 
-[node name="MissionBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer"]
+[node name="MissionBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_76v2p")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/MissionBox"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/MissionBox"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/MissionBox/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/MissionBox/MarginContainer"]
 layout_mode = 2
 
-[node name="MissionSelectButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/MissionBox/MarginContainer/VBoxContainer"]
+[node name="MissionSelectButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/MissionBox/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
@@ -182,7 +188,7 @@ theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 24
 text = "New Mission"
 
-[node name="MissionLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/MissionBox/MarginContainer/VBoxContainer"]
+[node name="MissionLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/MissionBox/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 custom_minimum_size = Vector2(0, 32)
@@ -193,21 +199,21 @@ text = "Planet 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="InventoryBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer"]
+[node name="InventoryBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_76v2p")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/InventoryBox"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/InventoryBox"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/InventoryBox/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/InventoryBox/MarginContainer"]
 layout_mode = 2
 
-[node name="InventoryOpenButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/InventoryBox/MarginContainer/VBoxContainer"]
+[node name="InventoryOpenButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/InventoryBox/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
@@ -217,7 +223,7 @@ theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 24
 text = "Inventory"
 
-[node name="InventorySizeLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/InventoryBox/MarginContainer/VBoxContainer"]
+[node name="InventorySizeLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/InventoryBox/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 custom_minimum_size = Vector2(0, 32)
@@ -228,40 +234,41 @@ text = "16 Items"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ClickerScene" type="BoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="ClickerScene" type="BoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 16
 
-[node name="CenterBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene"]
+[node name="CenterBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene"]
 layout_mode = 2
-size_flags_horizontal = 3
 
-[node name="EnemyBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer"]
+[node name="EnemyBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
+size_flags_horizontal = 0
 size_flags_vertical = 3
 theme = ExtResource("3_76v2p")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="BackgroundTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer"]
+[node name="BackgroundTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer"]
 layout_mode = 2
 texture = ExtResource("3_jv6wh")
 stretch_mode = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="EnemyNameLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="EnemyNameLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
@@ -269,7 +276,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iacmt")
 text = "Grifindor"
 
-[node name="MissionProgressLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="MissionProgressLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
@@ -279,13 +286,19 @@ theme_override_fonts/font = ExtResource("1_iacmt")
 text = "0 / 10"
 horizontal_alignment = 2
 
-[node name="EnemyTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EnemyTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 3
 texture = ExtResource("4_x6ack")
 expand_mode = 5
 
-[node name="EnemyHealthBar" type="ProgressBar" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer"]
+[node name="EnemyHealthBar" type="ProgressBar" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
@@ -294,29 +307,30 @@ step = 1.0
 value = 50.0
 show_percentage = false
 
-[node name="AttackButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer"]
+[node name="AttackButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer"]
 unique_name_in_owner = true
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 focus_mode = 0
 
-[node name="RightBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene"]
+[node name="RightBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="SettingsBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer"]
+[node name="SettingsBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/RightBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_76v2p")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer/SettingsBox"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/RightBoxContainer/SettingsBox"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="OptionsButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer/SettingsBox/MarginContainer"]
+[node name="OptionsButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/RightBoxContainer/SettingsBox/MarginContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
@@ -326,22 +340,22 @@ theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 16
 text = "Options"
 
-[node name="LogBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer"]
+[node name="LogBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/RightBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("3_76v2p")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer/LogBox"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/RightBoxContainer/LogBox"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer/LogBox/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/RightBoxContainer/LogBox/MarginContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer/LogBox/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/RightBoxContainer/LogBox/MarginContainer/VBoxContainer"]
 texture_filter = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -349,7 +363,7 @@ theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 24
 text = "Mission Log"
 
-[node name="MissionLogLabel" type="RichTextLabel" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer/LogBox/MarginContainer/VBoxContainer"]
+[node name="MissionLogLabel" type="RichTextLabel" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/RightBoxContainer/LogBox/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
@@ -374,101 +388,140 @@ text = "- Found weapon
 
 "
 
-[node name="InventoryScene" type="BoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="InventoryScene" type="BoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="UpBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer"]
+[node name="UpBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="OpenInventoryBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer"]
+[node name="OpenInventoryBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("3_76v2p")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer"]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="EquipmentGridContainer" type="GridContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer"]
+[node name="EquipmentGridContainer" type="GridContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-columns = 12
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 15
 
-[node name="EquipmentSlot" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+[node name="EquipmentSlot" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
 layout_mode = 2
 
-[node name="EquipmentSlot2" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+[node name="EquipmentSlot2" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
 layout_mode = 2
 
-[node name="EquipmentSlot3" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+[node name="EquipmentSlot3" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
 layout_mode = 2
 
-[node name="EquipmentSlot4" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+[node name="EquipmentSlot4" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
 layout_mode = 2
 
-[node name="EquipmentSlot5" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+[node name="EquipmentSlot5" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
 layout_mode = 2
 
-[node name="EquipmentSlot6" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+[node name="EquipmentSlot6" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
 layout_mode = 2
 
-[node name="EquipmentSlot7" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+[node name="EquipmentSlot7" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
 layout_mode = 2
 
-[node name="EquipmentSlot8" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+[node name="EquipmentSlot8" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
 layout_mode = 2
 
-[node name="EquipmentSlot9" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+[node name="EquipmentSlot9" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
 layout_mode = 2
 
-[node name="EquipmentSlot10" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+[node name="EquipmentSlot10" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
 layout_mode = 2
 
-[node name="EquipmentSlot11" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+[node name="EquipmentSlot11" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
 layout_mode = 2
 
-[node name="EquipmentSlot12" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+[node name="EquipmentSlot12" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
 layout_mode = 2
 
-[node name="DownBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer"]
+[node name="EquipmentSlot13" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot14" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot15" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot16" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot17" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot18" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot19" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot20" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot21" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot22" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot23" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="EquipmentSlot24" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/UpBoxContainer/OpenInventoryBox/MarginContainer/ScrollContainer/EquipmentGridContainer" instance=ExtResource("9_mai8y")]
+layout_mode = 2
+
+[node name="DownBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="InfoEquipmentBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer"]
+[node name="InfoEquipmentBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/DownBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("3_76v2p")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="SelectedEquipmentLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer"]
+[node name="SelectedEquipmentLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
@@ -477,7 +530,7 @@ theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 24
 text = "Test Helmet"
 
-[node name="SelectedEquipmentInformationLabel" type="RichTextLabel" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer"]
+[node name="SelectedEquipmentInformationLabel" type="RichTextLabel" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 custom_minimum_size = Vector2(0, 36)
@@ -490,12 +543,12 @@ text = "200 Power
 [color=red]+3[/color] Once Equiped"
 scroll_active = false
 
-[node name="ActionsInventoryContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer"]
+[node name="ActionsInventoryContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="SellButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer"]
+[node name="SellButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer"]
 texture_filter = 2
 layout_mode = 2
 focus_mode = 0
@@ -504,7 +557,7 @@ theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 16
 text = "Sell"
 
-[node name="EquipButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer"]
+[node name="EquipButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
@@ -514,10 +567,281 @@ theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 16
 text = "Equip"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="UpgradeScene" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+script = ExtResource("12_ioaeq")
+slot_template = ExtResource("12_drdnd")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="X1Button" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme = ExtResource("6_huasi")
+text = "X 1"
+
+[node name="X10Button" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme = ExtResource("6_huasi")
+text = "X 10"
+
+[node name="X100Button" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme = ExtResource("6_huasi")
+text = "X 100"
+
+[node name="MaxButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme = ExtResource("6_huasi")
+text = "Max"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerUpgrades" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer"]
 layout_mode = 2
 
-[node name="GoldLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/PlayerUpgrades"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("3_76v2p")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/PlayerUpgrades/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="PlayerUpgradesContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/PlayerUpgrades/PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/PlayerUpgrades/PanelContainer/MarginContainer/PlayerUpgradesContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 24
+text = "Player"
+
+[node name="UpgradeSlot" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/PlayerUpgrades/PanelContainer/MarginContainer/PlayerUpgradesContainer" instance=ExtResource("12_drdnd")]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+
+[node name="SellButton" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/PlayerUpgrades/PanelContainer/MarginContainer/PlayerUpgradesContainer/UpgradeSlot/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" index="1"]
+visible = false
+
+[node name="Control" type="Control" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/PlayerUpgrades/PanelContainer/MarginContainer/PlayerUpgradesContainer"]
+layout_mode = 2
+
+[node name="EquipmentUpgrades" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("3_76v2p")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 24
+text = "Equipment"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="EquipmentUpgradesContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="UpgradeSlot" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/EquipmentUpgradesContainer" instance=ExtResource("12_drdnd")]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+
+[node name="SellButton" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/EquipmentUpgradesContainer/UpgradeSlot/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" index="1"]
+visible = false
+
+[node name="UpgradeSlot2" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/EquipmentUpgradesContainer" instance=ExtResource("12_drdnd")]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+
+[node name="SellButton" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/EquipmentUpgradesContainer/UpgradeSlot2/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" index="1"]
+visible = false
+
+[node name="UpgradeSlot3" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/EquipmentUpgradesContainer" instance=ExtResource("12_drdnd")]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+
+[node name="SellButton" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/EquipmentUpgradesContainer/UpgradeSlot3/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" index="1"]
+visible = false
+
+[node name="UpgradeSlot4" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/EquipmentUpgradesContainer" instance=ExtResource("12_drdnd")]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+
+[node name="SellButton" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/EquipmentUpgradesContainer/UpgradeSlot4/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" index="1"]
+visible = false
+
+[node name="UpgradeSlot5" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/EquipmentUpgradesContainer" instance=ExtResource("12_drdnd")]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+
+[node name="SellButton" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/EquipmentUpgradesContainer/UpgradeSlot5/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" index="1"]
+visible = false
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="IdleUpgrades" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2"]
+custom_minimum_size = Vector2(470, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("3_76v2p")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 24
+text = "Idle Shop"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(410, 0)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="IdleUpgradesContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+
+[node name="UpgradeSlot" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer" instance=ExtResource("12_drdnd")]
+layout_mode = 2
+
+[node name="InformationLabel" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot/MarginContainer/HBoxContainer" index="1"]
+text = "Bought: 1
+Idle: 35 P/s"
+
+[node name="UpgradeSlot2" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer" instance=ExtResource("12_drdnd")]
+layout_mode = 2
+
+[node name="InformationLabel" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot2/MarginContainer/HBoxContainer" index="1"]
+text = "Bought: 1
+Idle: 35 P/s"
+
+[node name="UpgradeSlot3" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer" instance=ExtResource("12_drdnd")]
+layout_mode = 2
+
+[node name="InformationLabel" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot3/MarginContainer/HBoxContainer" index="1"]
+text = "Bought: 1
+Idle: 35 P/s"
+
+[node name="UpgradeSlot4" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer" instance=ExtResource("12_drdnd")]
+layout_mode = 2
+
+[node name="InformationLabel" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot4/MarginContainer/HBoxContainer" index="1"]
+text = "Bought: 1
+Idle: 35 P/s"
+
+[node name="UpgradeSlot5" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer" instance=ExtResource("12_drdnd")]
+layout_mode = 2
+
+[node name="InformationLabel" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot5/MarginContainer/HBoxContainer" index="1"]
+text = "Bought: 1
+Idle: 35 P/s"
+
+[node name="UpgradeSlot6" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer" instance=ExtResource("12_drdnd")]
+layout_mode = 2
+
+[node name="InformationLabel" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot6/MarginContainer/HBoxContainer" index="1"]
+text = "Bought: 1
+Idle: 35 P/s"
+
+[node name="UpgradeSlot7" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer" instance=ExtResource("12_drdnd")]
+layout_mode = 2
+
+[node name="InformationLabel" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot7/MarginContainer/HBoxContainer" index="1"]
+text = "Bought: 1
+Idle: 35 P/s"
+
+[node name="UpgradeSlot8" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer" instance=ExtResource("12_drdnd")]
+layout_mode = 2
+
+[node name="InformationLabel" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot8/MarginContainer/HBoxContainer" index="1"]
+text = "Bought: 1
+Idle: 35 P/s"
+
+[node name="UpgradeSlot9" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer" instance=ExtResource("12_drdnd")]
+layout_mode = 2
+
+[node name="InformationLabel" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot9/MarginContainer/HBoxContainer" index="1"]
+text = "Bought: 1
+Idle: 35 P/s"
+
+[node name="UpgradeSlot10" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer" instance=ExtResource("12_drdnd")]
+layout_mode = 2
+
+[node name="InformationLabel" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot10/MarginContainer/HBoxContainer" index="1"]
+text = "Bought: 1
+Idle: 35 P/s"
+
+[node name="LowerInformation" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GoldLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/LowerInformation"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
@@ -526,7 +850,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iacmt")
 text = "100 Gold"
 
-[node name="UpgradeButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="UpgradeButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/LowerInformation"]
 unique_name_in_owner = true
 texture_filter = 2
 custom_minimum_size = Vector2(100, 0)
@@ -536,10 +860,31 @@ theme = ExtResource("6_huasi")
 theme_override_fonts/font = ExtResource("1_iacmt")
 text = "NeoForge"
 
-[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/MissionBox/MarginContainer/VBoxContainer/MissionSelectButton" to="." method="_on_mission_select_button_pressed"]
-[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LeftBoxContainer/InventoryBox/MarginContainer/VBoxContainer/InventoryOpenButton" to="." method="_on_inventory_open_button_pressed"]
-[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton" to="." method="_on_attack_button_pressed"]
-[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ClickerScene/RightBoxContainer/SettingsBox/MarginContainer/OptionsButton" to="." method="_on_options_button_pressed"]
-[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer/SellButton" to="." method="_on_sell_button_pressed"]
-[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer/EquipButton" to="." method="_on_equip_button_pressed"]
-[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/UpgradeButton" to="." method="_on_upgrade_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/MissionBox/MarginContainer/VBoxContainer/MissionSelectButton" to="." method="_on_mission_select_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/InventoryBox/MarginContainer/VBoxContainer/InventoryOpenButton" to="." method="_on_inventory_open_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton" to="." method="_on_attack_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/RightBoxContainer/SettingsBox/MarginContainer/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer/SellButton" to="." method="_on_sell_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer/EquipButton" to="." method="_on_equip_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer/X1Button" to="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene" method="_on_x_1_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer/X10Button" to="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene" method="_on_x_10_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer/X100Button" to="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene" method="_on_x_100_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer/MaxButton" to="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene" method="_on_max_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/LowerInformation/UpgradeButton" to="." method="_on_upgrade_button_pressed"]
+
+[editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/PlayerUpgrades/PanelContainer/MarginContainer/PlayerUpgradesContainer/UpgradeSlot"]
+[editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/EquipmentUpgradesContainer/UpgradeSlot"]
+[editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/EquipmentUpgradesContainer/UpgradeSlot2"]
+[editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/EquipmentUpgradesContainer/UpgradeSlot3"]
+[editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/EquipmentUpgradesContainer/UpgradeSlot4"]
+[editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/EquipmentUpgradesContainer/UpgradeSlot5"]
+[editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot"]
+[editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot2"]
+[editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot3"]
+[editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot4"]
+[editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot5"]
+[editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot6"]
+[editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot7"]
+[editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot8"]
+[editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot9"]
+[editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/IdleUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/IdleUpgradesContainer/UpgradeSlot10"]

@@ -1,6 +1,6 @@
 extends Node
 
-enum SCENES {CLICK, INVENTORY}
+enum SCENES {CLICK, INVENTORY, UPGRADE}
 
 var current_scene := SCENES.CLICK
 

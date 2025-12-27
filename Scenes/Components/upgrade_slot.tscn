@@ -1,0 +1,62 @@
+[gd_scene load_steps=6 format=3 uid="uid://d0s0ljl3yflo0"]
+
+[ext_resource type="PackedScene" uid="uid://di50pwofnotxb" path="res://Scenes/Components/upgrade_button.tscn" id="1_g0p64"]
+[ext_resource type="Theme" uid="uid://chweu1s0cwtc7" path="res://Assets/Themes/panel_placeholder.tres" id="1_tu7e0"]
+[ext_resource type="Script" uid="uid://de048kehr55m5" path="res://Scripts/Components/upgrade_slot.gd" id="2_jhatt"]
+[ext_resource type="PackedScene" uid="uid://ck37rgq04pm6p" path="res://Scenes/Components/sell_button.tscn" id="2_tu7e0"]
+[ext_resource type="PackedScene" uid="uid://r8x8rwxwlapa" path="res://Scenes/Components/item_slot.tscn" id="3_83xnw"]
+
+[node name="UpgradeSlot" type="PanelContainer"]
+custom_minimum_size = Vector2(420, 0)
+offset_right = 416.0
+offset_bottom = 66.0
+size_flags_horizontal = 0
+theme = ExtResource("1_tu7e0")
+script = ExtResource("2_jhatt")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="ItemSlot" parent="MarginContainer/HBoxContainer" instance=ExtResource("3_83xnw")]
+unique_name_in_owner = true
+layout_mode = 2
+expand_mode = 3
+
+[node name="InformationLabel" type="RichTextLabel" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+bbcode_enabled = true
+text = "Lv: 1
+Power: 35K"
+fit_content = true
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="UpgradeButton" parent="MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource("1_g0p64")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="SellButton" parent="MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource("2_tu7e0")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[connection signal="pressed" from="MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/UpgradeButton" to="." method="_on_upgrade_button_pressed"]

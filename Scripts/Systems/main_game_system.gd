@@ -28,8 +28,10 @@ extends Control
 @onready var equip_button = %EquipButton
 
 # Scenes
+@onready var game_play_scene = %GamePlayScene
 @onready var clicker_scene = %ClickerScene
 @onready var inventory_scene = %InventoryScene
+@onready var upgrade_scene: UpgradeSystem = %UpgradeScene
 
 @export var mission: MissionTemplate = null
 
@@ -64,6 +66,7 @@ func _setup_signals() -> void:
 	DataManager.update_ui.connect(_update_gear_ui)
 	DataManager.update_ui.connect(_update_inventory_ui)
 	DataManager.update_ui.connect(_update_selected_equiment_ui)
+	DataManager.update_ui.connect(upgrade_scene.Update_UI)
 
 func _setup_enemy(new_enemy: EnemyTemplate) -> void:
 	new_enemy.Setup()
@@ -91,8 +94,8 @@ func _update_enemy_ui() -> void:
 		mission_progress_label.text = str(current_mission_progress, " / ", mission.Get_Mission_Size())
 
 func _update_player_ui() -> void:
-	level_label.text = str("Lv: ", DataManager.Get("level"))
-	power_label.text = str("Power: ", DataManager.Get("power"))
+	level_label.text = str("Lv: ", FormatManager.format_number(DataManager.Get("level")))
+	power_label.text = str("Power: ", FormatManager.format_number(DataManager.Get("power")))
 
 func _update_gear_ui() -> void:
 	var gear_slots = gear_container.get_children()
@@ -135,28 +138,34 @@ func _update_selected_equiment_ui(selected_equipment: EquipmentTemplate = null) 
 			equip_button.text = "Equip"
 			var improved_power := DataManager.Calculate_Improved_Power(_selected_equipment)
 			if (improved_power < 0):
-				improved_power_text = str("[color=#B3261E]",improved_power ," Once Equipped[/color]")
+				improved_power_text = str("[color=#B3261E]",FormatManager.format_number(improved_power) ," Once Equipped[/color]")
 			else:
-				improved_power_text = str("[color=#1F7A1F]+",improved_power ," Once Equipped[/color]")
+				improved_power_text = str("[color=#1F7A1F]+",FormatManager.format_number(improved_power) ," Once Equipped[/color]")
 		else:
 			equip_button.text = "Unequip"
 		
-		selected_equipment_information_label.text = str(_selected_equipment.equipment_current_attack_power, " Power\n", improved_power_text)
+		selected_equipment_information_label.text = str(FormatManager.format_number(_selected_equipment.equipment_current_attack_power), " Power\n", improved_power_text)
 		actions_inventory_container.visible = true
 
 func _update_game_ui() -> void:
 	var scene := SceneManager.Get_Current_Scene()
+	game_play_scene.show()
+	inventory_scene.hide()
+	clicker_scene.hide()
+	upgrade_scene.hide()
+	
 	match scene:
 		SceneManager.SCENES.CLICK:
-			inventory_scene.visible = false
-			clicker_scene.visible = true
+			clicker_scene.show()
 		SceneManager.SCENES.INVENTORY:
-			clicker_scene.visible = false
-			inventory_scene.visible = true
+			inventory_scene.show()
+		SceneManager.SCENES.UPGRADE:
+			game_play_scene.hide()
+			upgrade_scene.show()
 	
 	mission_label.text = _current_mission.mission_name
-	gold_label.text = str(DataManager.current_player_gold, " Gold")
-	inventory_size_label.text = str(DataManager.inventory.size(), " Items")
+	gold_label.text = str(FormatManager.format_number(DataManager.Get("gold")), " Gold")
+	inventory_size_label.text = str(FormatManager.format_number(DataManager.inventory.size()), " Items")
 
 func _update_mission_log_ui(add_text: String) -> void:
 	var current_log = mission_log_label.text
@@ -174,7 +183,12 @@ func _on_options_button_pressed() -> void:
 	pass # Replace with function body.
 
 func _on_upgrade_button_pressed() -> void:
-	pass # Replace with function body.
+	if (SceneManager.Get_Current_Scene() != SceneManager.SCENES.UPGRADE):
+		upgrade_scene.Setup_Upgrades()
+		SceneManager.Set_Current_Scene(SceneManager.SCENES.UPGRADE)
+	else:
+		SceneManager.Set_Current_Scene(SceneManager.SCENES.CLICK)
+	_update_game_ui()
 
 func _on_attack_button_pressed() -> void:
 	if (_current_enemy and !_mission_completed):
@@ -186,7 +200,7 @@ func _on_attack_button_pressed() -> void:
 				_update_mission_log_ui(str("Boss Defeated"))
 			else:
 				_update_mission_log_ui(str("Defeated ", _current_enemy.enemy_name))
-			_update_mission_log_ui(str("Gained ", _current_enemy.Get_Reward(), " Gold"))
+			_update_mission_log_ui(str("Gained ", FormatManager.format_number(_current_enemy.Get_Reward()), " Gold"))
 			
 			var drop_name = _current_enemy.Possible_Drop()
 			if (drop_name != ""):
@@ -207,13 +221,13 @@ func _on_attack_button_pressed() -> void:
 		_update_enemy_ui()
 
 func _on_inventory_open_button_pressed() -> void:
-	if (SceneManager.Get_Current_Scene() != SceneManager.SCENES.CLICK):
-		SceneManager.Set_Current_Scene(SceneManager.SCENES.CLICK)
-		inventory_open_button.text = "Inventory"
-	else:
+	if (SceneManager.Get_Current_Scene() != SceneManager.SCENES.INVENTORY):
 		SceneManager.Set_Current_Scene(SceneManager.SCENES.INVENTORY)
 		inventory_open_button.text = "Close Inventory"
 		_update_inventory_ui()
+	else:
+		SceneManager.Set_Current_Scene(SceneManager.SCENES.CLICK)
+		inventory_open_button.text = "Inventory"
 	_update_game_ui()
 
 func _on_sell_button_pressed():

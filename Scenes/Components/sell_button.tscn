@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://ck37rgq04pm6p"]
+
+[ext_resource type="Theme" uid="uid://6d11oaqdfr8f" path="res://Assets/Themes/button_placeholder.tres" id="1_nw4a2"]
+
+[node name="SellButton" type="Button"]
+custom_minimum_size = Vector2(80, 0)
+theme = ExtResource("1_nw4a2")
+text = "Sell x100
+355 Gold"

@@ -25,7 +25,7 @@ func Take_Damage(damage: int) -> void:
 
 func Is_Defeated() -> bool:
 	if (enemy_current_health != 0): return false
-	DataManager.Set("current_player_gold", DataManager.current_player_gold + Get_Reward())
+	DataManager.Set("gold", DataManager.current_player_gold + Get_Reward())
 	return true
 
 func Possible_Drop() -> String:
@@ -33,6 +33,8 @@ func Possible_Drop() -> String:
 		var chance := randf()
 		if (chance < equipment.equipment_drop_chance):
 			var new_equipment: EquipmentTemplate = equipment.duplicate()
+			if (DataManager.Get_Upgrade_Item(new_equipment.equipment_name) == null):
+				DataManager.Add_To_Upgrade_List(new_equipment)
 			new_equipment.Set_Power()
 			DataManager.Add_To_Inventory(new_equipment)
 			return equipment.equipment_name

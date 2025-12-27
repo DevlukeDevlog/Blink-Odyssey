@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://di50pwofnotxb"]
+
+[ext_resource type="Theme" uid="uid://6d11oaqdfr8f" path="res://Assets/Themes/button_placeholder.tres" id="1_uqber"]
+
+[node name="UpgradeButton" type="Button"]
+custom_minimum_size = Vector2(100, 0)
+theme = ExtResource("1_uqber")
+text = "Upgrade x100
+560 Gold"
