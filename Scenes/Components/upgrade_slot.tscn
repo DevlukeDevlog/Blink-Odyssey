@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://r8x8rwxwlapa" path="res://Scenes/Components/item_slot.tscn" id="3_83xnw"]
 
 [node name="UpgradeSlot" type="PanelContainer"]
-custom_minimum_size = Vector2(420, 0)
+custom_minimum_size = Vector2(420, 75)
 offset_right = 416.0
 offset_bottom = 66.0
 size_flags_horizontal = 0
@@ -60,3 +60,4 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [connection signal="pressed" from="MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/UpgradeButton" to="." method="_on_upgrade_button_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/SellButton" to="." method="_on_sell_button_pressed"]

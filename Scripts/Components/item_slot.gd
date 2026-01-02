@@ -11,3 +11,5 @@ func _ready() -> void:
 func Setup_Slot() -> void:
 	if (item is UpgradeEquipmentTemplate):
 		item_icon.texture = item.item_icon_texture
+	elif (item is IdleTemplate):
+		item_icon.texture = item.idle_icon_texture

@@ -5,6 +5,7 @@ extends VBoxContainer
 
 @onready var player_upgrades_container = %PlayerUpgradesContainer
 @onready var equipment_upgrades_container = %EquipmentUpgradesContainer
+@onready var idle_upgrades_container = %IdleUpgradesContainer
 
 @onready var x_1_button = %X1Button
 @onready var x_10_button = %X10Button
@@ -16,8 +17,13 @@ var update_multiplier := 1
 func Setup_Upgrades() -> void:
 	_clear_upgrades(player_upgrades_container)
 	_clear_upgrades(equipment_upgrades_container)
+	_clear_upgrades(idle_upgrades_container)
+
 	_populate_upgrades()
+	_populate_idle_upgrades()
+
 	_on_x_1_button_pressed()
+
 
 func _clear_upgrades(container) -> void:
 	for child in container.get_children():
@@ -48,6 +54,16 @@ func _populate_upgrades() -> void:
 		upgrade_slot.custom_minimum_size.x = 350
 		upgrade_slot.update_multiplier = DataManager.Get("multiplier")
 		equipment_upgrades_container.add_child(upgrade_slot)
+
+func _populate_idle_upgrades() -> void:
+	for idle in DataManager.idle_upgrades:
+		var slot := slot_template.instantiate() as UpgradeSlot
+		slot.item = idle
+		slot.can_sell = true
+		slot.custom_minimum_size.x = 350
+		slot.update_multiplier = DataManager.Get("multiplier")
+		idle_upgrades_container.add_child(slot)
+
 
 func Update_UI() -> void:
 	for child in player_upgrades_container.get_children():
@@ -85,7 +101,7 @@ func _on_max_button_pressed():
 	_update_all_slots_multiplier(0)
 
 func _update_all_slots_multiplier(multiplier: int) -> void:
-	for container in [player_upgrades_container, equipment_upgrades_container]:
+	for container in [player_upgrades_container, equipment_upgrades_container, idle_upgrades_container]:
 		for child in container.get_children():
 			if child is UpgradeSlot:
 				child.update_multiplier = multiplier

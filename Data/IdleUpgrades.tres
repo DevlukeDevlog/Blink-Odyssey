@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ResourceGroup" load_steps=2 format=3 uid="uid://bppsxnc21jib2"]
+
+[ext_resource type="Script" uid="uid://bpvewngi4o2g5" path="res://addons/godot_resource_groups/resource_group.gd" id="1_l87ib"]
+
+[resource]
+script = ExtResource("1_l87ib")
+base_folder = "res://Data/Idle"
+includes = Array[String](["*.tres"])
+excludes = Array[String]([])
+paths = Array[String](["res://Data/Idle/test_idle_1.tres", "res://Data/Idle/test_idle_2.tres", "res://Data/Idle/test_idle_3.tres"])
+metadata/_custom_type_script = "uid://bpvewngi4o2g5"

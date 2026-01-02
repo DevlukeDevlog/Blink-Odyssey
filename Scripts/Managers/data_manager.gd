@@ -9,6 +9,7 @@ signal select_equipment(selected_equipment: EquipmentTemplate)
 # =====================================================
 var start_player_lv := 1
 var start_player_power := 1
+var start_idle_power := 0
 var start_player_gold := 0
 var start_difficulty := 1.0
 var start_planet := "planet_1"
@@ -18,6 +19,7 @@ var start_planet := "planet_1"
 # =====================================================
 var current_player_lv := start_player_lv
 var current_player_power := start_player_power
+var current_idle_power := start_idle_power
 var current_equipment_power := 0
 var current_player_gold := start_player_gold
 var current_difficulty := start_difficulty
@@ -45,6 +47,13 @@ var equiped_gear: Array[EquipmentTemplate] = []
 var upgrade_list_equipment: Array[UpgradeEquipmentTemplate] = []
 
 # =====================================================
+# IDLE UPGRADES
+# =====================================================
+var idle_upgrade_templates: Array[IdleTemplate] = []
+var idle_upgrades: Array[IdleTemplate] = []         
+
+
+# =====================================================
 # GENERIC SET / GET
 # =====================================================
 func Set(property: String, value) -> void:
@@ -57,6 +66,8 @@ func Set(property: String, value) -> void:
 			current_equipment_power = value
 		"multiplier":
 			upgrade_multiplier = value
+		"dps":
+			current_idle_power = value
 	update_ui.emit()
 
 func Get(property: String):
@@ -71,6 +82,8 @@ func Get(property: String):
 			return get_level_up_cost()
 		"multiplier":
 			return upgrade_multiplier
+		"dps":
+			return current_idle_power
 	return null
 
 # =====================================================
@@ -285,3 +298,18 @@ func Save_Data() -> void:
 func Load_Data() -> void:
 	# TODO
 	pass
+
+func Load_Idle_Templates(upgrades: ResourceGroup) -> void:
+	idle_upgrade_templates.clear()
+	upgrades.load_all_into(idle_upgrade_templates)
+
+func Create_Idle_Upgrades() -> void:
+	idle_upgrades.clear()
+
+	for template in idle_upgrade_templates:
+		var instance: IdleTemplate = template.duplicate(true)
+		instance.idle_amount = 0
+		instance.Update_Power()
+		idle_upgrades.append(instance)
+
+	update_ui.emit()

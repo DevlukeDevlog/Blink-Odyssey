@@ -8,6 +8,7 @@ extends Control
 # Player's UI
 @onready var level_label: Label = %LevelLabel
 @onready var power_label: Label = %PowerLabel
+@onready var idle_label = %IdleLabel
 @onready var gear_container = %GearContainer
 
 # Enemy's UI
@@ -34,12 +35,14 @@ extends Control
 @onready var upgrade_scene: UpgradeSystem = %UpgradeScene
 
 @export var mission: MissionTemplate = null
+@export var idle_upgrades: ResourceGroup = null
 
 var _current_mission: MissionTemplate = null
 var _current_enemy: EnemyTemplate = null
 var _on_boss_battle := false
 var _mission_completed := false
 var _selected_equipment: EquipmentTemplate = null
+var _damage_timer := Timer.new()
 
 func _ready() -> void:
 	_setup_game()
@@ -47,6 +50,9 @@ func _ready() -> void:
 
 # Setups
 func _setup_game() -> void:
+	DataManager.Load_Idle_Templates(idle_upgrades)
+	DataManager.Create_Idle_Upgrades()
+	
 	if (mission):
 		_current_mission = mission.duplicate()
 		_setup_signals()
@@ -57,6 +63,10 @@ func _setup_game() -> void:
 		_update_gear_ui()
 		_update_selected_equiment_ui()
 		mission_log_label.text = ""
+		_damage_timer.timeout.connect(_on_damage_timer_timeout)
+		_damage_timer.wait_time = 1
+		_damage_timer.autostart = true
+		add_child(_damage_timer)
 	else:
 		printerr("No mission selected!")
 
@@ -65,7 +75,6 @@ func _setup_signals() -> void:
 	DataManager.update_ui.connect(_update_player_ui)
 	DataManager.update_ui.connect(_update_gear_ui)
 	DataManager.update_ui.connect(_update_inventory_ui)
-	DataManager.update_ui.connect(_update_selected_equiment_ui)
 	DataManager.update_ui.connect(upgrade_scene.Update_UI)
 
 func _setup_enemy(new_enemy: EnemyTemplate) -> void:
@@ -82,6 +91,8 @@ func _setup_enemy(new_enemy: EnemyTemplate) -> void:
 
 # UI
 func _update_enemy_ui() -> void:
+	if (_current_enemy == null): return
+	enemy_health_bar.visible = true
 	enemy_health_bar.value = _current_enemy.enemy_current_health
 	if (_mission_completed):
 		mission_progress_label.text = ""
@@ -96,6 +107,7 @@ func _update_enemy_ui() -> void:
 func _update_player_ui() -> void:
 	level_label.text = str("Lv: ", FormatManager.format_number(DataManager.Get("level")))
 	power_label.text = str("Power: ", FormatManager.format_number(DataManager.Get("power")))
+	idle_label.text = str("DPS: ", FormatManager.format_number(DataManager.Get("dps")), " /s")
 
 func _update_gear_ui() -> void:
 	var gear_slots = gear_container.get_children()
@@ -174,6 +186,36 @@ func _update_mission_log_ui(add_text: String) -> void:
 func _clear_enemy_ui() -> void:
 	enemy_texture.texture = null
 	enemy_name_label.text = ""
+	enemy_health_bar.visible = false
+
+# Helpers
+func _attack() -> void:
+	if (_current_enemy.Is_Defeated()):
+		var enemies := _current_mission.mission_enemies
+		if (_on_boss_battle):
+			_update_mission_log_ui(str("Boss Defeated"))
+		else:
+			_update_mission_log_ui(str("Defeated ", _current_enemy.enemy_name))
+		_update_mission_log_ui(str("Gained ", FormatManager.format_number(_current_enemy.Get_Reward()), " Gold"))
+		
+		var drop_name = _current_enemy.Possible_Drop()
+		if (drop_name != ""):
+			_update_mission_log_ui(str("Picked up (", drop_name, ")"))
+		
+		if (enemies.size() > 1):
+			enemies.pop_front()
+			_setup_enemy(enemies[0])
+			_current_mission.mission_enemies = enemies
+		elif (!_on_boss_battle):
+			_setup_enemy(_current_mission.mission_boss)
+			_on_boss_battle = true
+		else:
+			_current_enemy = null
+			_update_mission_log_ui(str("Mission Complete"))
+			_clear_enemy_ui()
+			_mission_completed = true
+		
+	_update_enemy_ui()
 
 # Buttons
 func _on_mission_select_button_pressed() -> void:
@@ -193,32 +235,7 @@ func _on_upgrade_button_pressed() -> void:
 func _on_attack_button_pressed() -> void:
 	if (_current_enemy and !_mission_completed):
 		_current_enemy.Take_Damage(DataManager.Get("power"))
-		
-		if (_current_enemy.Is_Defeated()):
-			var enemies := _current_mission.mission_enemies
-			if (_on_boss_battle):
-				_update_mission_log_ui(str("Boss Defeated"))
-			else:
-				_update_mission_log_ui(str("Defeated ", _current_enemy.enemy_name))
-			_update_mission_log_ui(str("Gained ", FormatManager.format_number(_current_enemy.Get_Reward()), " Gold"))
-			
-			var drop_name = _current_enemy.Possible_Drop()
-			if (drop_name != ""):
-				_update_mission_log_ui(str("Picked up (", drop_name, ")"))
-			
-			if (enemies.size() > 1):
-				enemies.pop_front()
-				_setup_enemy(enemies[0])
-				_current_mission.mission_enemies = enemies
-			elif (!_on_boss_battle):
-				_setup_enemy(_current_mission.mission_boss)
-				_on_boss_battle = true
-			else:
-				_update_mission_log_ui(str("Mission Complete"))
-				_clear_enemy_ui()
-				_mission_completed = true
-			
-		_update_enemy_ui()
+		_attack()
 
 func _on_inventory_open_button_pressed() -> void:
 	if (SceneManager.Get_Current_Scene() != SceneManager.SCENES.INVENTORY):
@@ -234,9 +251,17 @@ func _on_sell_button_pressed():
 	DataManager.Delete_From_Inventory(_selected_equipment)
 	_selected_equipment.Sell_Equipment()
 	_selected_equipment = null
+	_update_selected_equiment_ui()
 
 func _on_equip_button_pressed():
 	if (DataManager.Is_Equiped(_selected_equipment)):
 		DataManager.Remove_Gear(_selected_equipment)
 	else:
 		DataManager.Set_Gear(_selected_equipment)
+	
+	_update_selected_equiment_ui(_selected_equipment)
+
+func _on_damage_timer_timeout() -> void:
+	if (_current_enemy != null):
+		_current_enemy.Take_Damage(DataManager.Get("dps"))
+		_attack()

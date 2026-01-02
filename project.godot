@@ -25,6 +25,10 @@ FormatManager="*res://Scripts/Managers/format_manager.gd"
 
 window/stretch/mode="canvas_items"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_resource_groups/plugin.cfg")
+
 [file_customization]
 
 folder_colors={
@@ -33,6 +37,10 @@ folder_colors={
 "res://Scenes/": "blue",
 "res://Scripts/": "teal"
 }
+
+[godot_resource_groups]
+
+auto_rebuild=true
 
 [gui]
 
