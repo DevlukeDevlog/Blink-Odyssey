@@ -28,6 +28,14 @@ extends Control
 @onready var actions_inventory_container = %ActionsInventoryContainer
 @onready var equip_button = %EquipButton
 
+# Options UI
+@onready var option_open_actions = %OptionOpenActions
+@onready var options_button = %OptionsButton
+
+# Popup UI
+@onready var popup_screen = %PopupScreen
+@onready var offline_earnings_label = %OfflineEarningsLabel
+
 # Scenes
 @onready var game_play_scene = %GamePlayScene
 @onready var clicker_scene = %ClickerScene
@@ -36,6 +44,7 @@ extends Control
 
 @export var mission: MissionTemplate = null
 @export var idle_upgrades: ResourceGroup = null
+@export var equipment_list: ResourceGroup = null
 
 var _current_mission: MissionTemplate = null
 var _current_enemy: EnemyTemplate = null
@@ -50,8 +59,12 @@ func _ready() -> void:
 
 # Setups
 func _setup_game() -> void:
+	DataManager.Load_Equipment_Templates(equipment_list)
 	DataManager.Load_Idle_Templates(idle_upgrades)
 	DataManager.Create_Idle_Upgrades()
+	DataManager.Load_Data()
+	
+	_popup_ui()
 	
 	if (mission):
 		_current_mission = mission.duplicate()
@@ -90,6 +103,13 @@ func _setup_enemy(new_enemy: EnemyTemplate) -> void:
 	_current_enemy = new_enemy
 
 # UI
+func _popup_ui() -> void:
+	offline_earnings_label.text = DataManager.welcome_back_message
+	if (DataManager.welcome_back_message.trim_prefix(" ") == ""): 
+		popup_screen.hide()
+	else:
+		popup_screen.show()
+
 func _update_enemy_ui() -> void:
 	if (_current_enemy == null): return
 	enemy_health_bar.visible = true
@@ -222,7 +242,11 @@ func _on_mission_select_button_pressed() -> void:
 	pass # Replace with function body.
 
 func _on_options_button_pressed() -> void:
-	pass # Replace with function body.
+	option_open_actions.visible = !option_open_actions.visible 
+	if (option_open_actions.visible):
+		options_button.text = "Close options"
+	else:
+		options_button.text = "Options"
 
 func _on_upgrade_button_pressed() -> void:
 	if (SceneManager.Get_Current_Scene() != SceneManager.SCENES.UPGRADE):
@@ -265,3 +289,12 @@ func _on_damage_timer_timeout() -> void:
 	if (_current_enemy != null):
 		_current_enemy.Take_Damage(DataManager.Get("dps"))
 		_attack()
+
+func _on_reset_button_pressed():
+	DataManager.Reset_Game()
+
+func _on_quit_button_pressed():
+	DataManager._on_about_to_quit()
+
+func _on_close_button_pressed():
+	popup_screen.hide()

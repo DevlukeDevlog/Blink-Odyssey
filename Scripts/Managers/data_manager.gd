@@ -4,6 +4,13 @@ signal update_ui
 @warning_ignore("unused_signal")
 signal select_equipment(selected_equipment: EquipmentTemplate)
 
+const MAX_OFFLINE_SECONDS := 60 * 60 * 8 # 8 hours cap
+const SAVE_PATH := "user://savegame.json"
+const SAVE_VERSION := 1
+const OFFLINE_EFFICIENCY := 0.01 
+
+var welcome_back_message := ""
+
 # =====================================================
 # STARTING VALUES
 # =====================================================
@@ -25,6 +32,7 @@ var current_player_gold := start_player_gold
 var current_difficulty := start_difficulty
 var current_planet := start_planet
 var upgrade_multiplier := 1 # can be 1, 10, 100, 1000, or 0 for Max
+var last_active_time: int = 0
 
 # =====================================================
 # LEVEL / UPGRADE SYSTEM (SAME THING)
@@ -45,13 +53,14 @@ var prestige_multiplier := 1.0
 var inventory: Array[EquipmentTemplate] = []
 var equiped_gear: Array[EquipmentTemplate] = []
 var upgrade_list_equipment: Array[UpgradeEquipmentTemplate] = []
+var equipment_group : Array[EquipmentTemplate] = [] 
+var equipment_templates := {}
 
 # =====================================================
 # IDLE UPGRADES
 # =====================================================
 var idle_upgrade_templates: Array[IdleTemplate] = []
 var idle_upgrades: Array[IdleTemplate] = []         
-
 
 # =====================================================
 # GENERIC SET / GET
@@ -68,6 +77,8 @@ func Set(property: String, value) -> void:
 			upgrade_multiplier = value
 		"dps":
 			current_idle_power = value
+		"power":
+			current_player_power = value
 	update_ui.emit()
 
 func Get(property: String):
@@ -275,9 +286,6 @@ func Get_Upgrade_Item(item_name: String) -> UpgradeEquipmentTemplate:
 		if (item.item_name == item_name) : return item
 	return null
 
-# =====================================================
-# RESET / SAVE
-# =====================================================
 func Clear_Data() -> void:
 	current_player_lv = start_player_lv
 	current_player_power = start_player_power
@@ -292,12 +300,96 @@ func Clear_Data() -> void:
 	update_ui.emit()
 
 func Save_Data() -> void:
-	# TODO
-	pass
+	var save_data := {}
+
+	save_data["version"] = 1
+
+	save_data["player"] = {
+		"level": Get("level"),
+		"gold": Get("gold"),
+		"power": current_player_power,
+	}
+
+	save_data["inventory"] = Save_Equipment_List(inventory)
+	save_data["equipped"] = Save_Equipment_List(equiped_gear)
+	save_data["upgrade_equipment"] = Save_Upgrade_List()
+	save_data["idle_upgrades"] = Save_Idle_List()
+	save_data["last_played"] = Time.get_unix_time_from_system()
+
+	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	file.store_string(JSON.stringify(save_data))
+	file.close()
 
 func Load_Data() -> void:
-	# TODO
-	pass
+	if !FileAccess.file_exists(SAVE_PATH):
+		return
+
+	var file := FileAccess.open(SAVE_PATH, FileAccess.READ)
+	var data = JSON.parse_string(file.get_as_text())
+	file.close()
+
+	if typeof(data) != TYPE_DICTIONARY:
+		push_error("Save file corrupted")
+		return
+
+	# =====================
+	# PLAYER
+	# =====================
+	var p = data["player"]
+	Set("level", p["level"])
+	Set("gold", p["gold"])
+	Set("power", p["power"])
+	
+	Load_Equipment(data)
+	Load_Upgrade_List(data)
+	Load_Idle_List(data)
+	
+	Apply_Offline_Progress(data.get("last_played", Time.get_unix_time_from_system()))
+	
+	update_ui.emit()
+
+func Load_Equipment_Templates(equipment: ResourceGroup) -> void:
+	equipment_group.clear()
+	equipment.load_all_into(equipment_group)
+	
+	for res in equipment_group:
+		if res is EquipmentTemplate:
+			equipment_templates[res.equipment_name] = res
+
+func Save_Equipment_List(list: Array) -> Array:
+	var result := []
+	for equip in list as Array[EquipmentTemplate]:
+		result.append({
+			"name": equip.equipment_name,
+			"base_power": equip.equipment_current_attack_base_power,
+			"power": equip.equipment_current_attack_power,
+			"equiped": Is_Equiped(equip)
+		})
+	return result
+
+func Create_Equipment_From_Save(data: Dictionary) -> EquipmentTemplate:
+	if !equipment_templates.has(data["name"]):
+		push_error("Missing equipment template: " + data["name"])
+		return null
+
+	var base: EquipmentTemplate = equipment_templates[data["name"]]
+	var equip: EquipmentTemplate = base.duplicate(true)
+
+	equip.equipment_current_attack_base_power = data["base_power"]
+	equip.equipment_current_attack_power = data["power"]
+
+	return equip
+
+func Load_Equipment(save_data: Dictionary) -> void:
+	inventory.clear()
+	equiped_gear.clear()
+
+	for e in save_data.get("inventory", []):
+		var item = Create_Equipment_From_Save(e)
+		if item:
+			inventory.append(item)
+			if (e["equiped"]):
+				Set_Gear(item)
 
 func Load_Idle_Templates(upgrades: ResourceGroup) -> void:
 	idle_upgrade_templates.clear()
@@ -313,3 +405,132 @@ func Create_Idle_Upgrades() -> void:
 		idle_upgrades.append(instance)
 
 	update_ui.emit()
+
+func Save_Idle_List() -> Array:
+	var arr := []
+	for idle in idle_upgrades:
+		arr.append({
+			"name": idle.idle_name,
+			"amount": idle.idle_amount
+		})
+	return arr
+
+func Load_Upgrade_List(data: Dictionary) -> void:
+	upgrade_list_equipment.clear()
+
+	for entry in data.get("upgrade_equipment", []):
+		var equip_name = entry["name"]
+
+		# Base equipment must exist
+		if !equipment_templates.has(equip_name):
+			push_error("Missing equipment template for upgrade: " + equip_name)
+			continue
+
+		var base_equip: EquipmentTemplate = equipment_templates[equip_name]
+
+		var upgrade := UpgradeEquipmentTemplate.new()
+		upgrade.item_name = equip_name
+		upgrade.item_icon_texture = base_equip.equipment_icon_texture
+		upgrade.base_item_power = base_equip.equipment_base_attack_power
+		upgrade.base_upgrade_cost = base_equip.equipment_base_upgrade_cost
+
+		upgrade.item_lv = entry["lv"]
+		upgrade.item_bonus_power = entry["bonus"]
+
+		upgrade_list_equipment.append(upgrade)
+
+func Save_Upgrade_List() -> Array:
+	var arr := []
+	for upgrade in upgrade_list_equipment:
+		arr.append({
+			"name": upgrade.item_name,
+			"lv": upgrade.item_lv,
+			"bonus": upgrade.item_bonus_power
+		})
+	return arr
+
+func Load_Idle_List(data: Dictionary) -> void:
+	for entry in data.get("idle_upgrades", []):
+		for idle in idle_upgrades:
+			if (idle.idle_name == entry["name"]):
+				idle.idle_amount = entry["amount"]
+				idle.Update_Power()
+
+func Apply_Offline_Progress(last_played: int) -> void:
+	var now := Time.get_unix_time_from_system()
+	var seconds_away = max(0, now - last_played)
+	
+	# Cap offline seconds to MAX_OFFLINE_SECONDS
+	seconds_away = min(seconds_away, MAX_OFFLINE_SECONDS)
+	
+	var dps = Get("dps") * OFFLINE_EFFICIENCY
+	var earned = roundi(dps * seconds_away)
+	Set("gold", Get("gold") + earned)
+	
+		# Format time into hours, minutes, seconds
+	var time_str = format_seconds(seconds_away)
+	
+	# Show welcome back message
+	welcome_back_message = str("Welcome back\nYou've been away for %s" % time_str,"\nYou earned ", FormatManager.format_number(earned), " Gold")
+
+# Helper function to format seconds into hh:mm:ss
+func format_seconds(seconds: float) -> String:
+	var h = int(seconds / 3600)
+	var m = int(float(int(seconds) % 3600) / 60)
+	var s = int(int(seconds) % 60)
+	return "%02d:%02d:%02d" % [h, m, s]
+
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		Save_Last_Active_Time()
+
+func _on_about_to_quit():
+	Save_Last_Active_Time()
+
+func Save_Last_Active_Time():
+	last_active_time = int(Time.get_unix_time_from_system())
+	Save_Data()
+	get_tree().quit()
+
+func Reset_Game() -> void:
+	# =====================
+	# CLEAR PLAYER VALUES
+	# =====================
+	current_player_lv = start_player_lv
+	current_player_power = start_player_power
+	current_equipment_power = 0
+	current_player_gold = start_player_gold
+	current_difficulty = start_difficulty
+	current_planet = start_planet
+	upgrade_multiplier = 1
+	prestige_multiplier = 1.0
+	last_active_time = 0
+
+	# =====================
+	# CLEAR INVENTORY / GEAR
+	# =====================
+	inventory.clear()
+	equiped_gear.clear()
+	upgrade_list_equipment.clear()
+
+	# =====================
+	# RESET IDLE UPGRADES
+	# =====================
+	for idle in idle_upgrades:
+		idle.idle_amount = 0
+		idle.Update_Power()
+
+	# =====================
+	# DELETE SAVE FILE
+	# =====================
+	if FileAccess.file_exists(SAVE_PATH):
+		DirAccess.remove_absolute(SAVE_PATH)
+
+	update_ui.emit()
+
+	# =====================
+	# RELOAD CURRENT SCENE
+	# =====================
+	var tree := get_tree()
+	if tree:
+		tree.reload_current_scene()

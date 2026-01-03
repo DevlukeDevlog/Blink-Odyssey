@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://bnb77ygf1dd3i" path="res://Scripts/Resources/enemy_template.gd" id="1_adgvk"]
 [ext_resource type="Script" uid="uid://bc56friqt0408" path="res://Scripts/Resources/equipment_template.gd" id="1_ndg48"]
 [ext_resource type="Texture2D" uid="uid://bcycsfoka5ofu" path="res://Assets/Art/Test/enemy_placeholder_2.png" id="1_uqqn3"]
-[ext_resource type="Resource" uid="uid://bi5g5w2rc14c7" path="res://Data/Equipment/Helmets/test_helmet.tres" id="2_c8p84"]
-[ext_resource type="Resource" uid="uid://fl77yj6auwap" path="res://Data/Equipment/Boots/test_boot.tres" id="3_msf3c"]
+[ext_resource type="Resource" uid="uid://bi5g5w2rc14c7" path="res://Data/Equipment/test_helmet.tres" id="2_c8p84"]
+[ext_resource type="Resource" uid="uid://fl77yj6auwap" path="res://Data/Equipment/test_boot.tres" id="3_msf3c"]
 
 [resource]
 script = ExtResource("1_adgvk")

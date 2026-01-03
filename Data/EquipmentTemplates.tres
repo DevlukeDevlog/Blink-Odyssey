@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ResourceGroup" load_steps=2 format=3 uid="uid://dxdruj140uhi5"]
+
+[ext_resource type="Script" uid="uid://bpvewngi4o2g5" path="res://addons/godot_resource_groups/resource_group.gd" id="1_dpqj3"]
+
+[resource]
+script = ExtResource("1_dpqj3")
+base_folder = "res://Data/Equipment"
+includes = Array[String](["*.tres"])
+excludes = Array[String]([])
+paths = Array[String](["res://Data/Equipment/test_boot.tres", "res://Data/Equipment/test_helmet.tres", "res://Data/Equipment/test_suit.tres", "res://Data/Equipment/test_weapon.tres"])
+metadata/_custom_type_script = "uid://bpvewngi4o2g5"
