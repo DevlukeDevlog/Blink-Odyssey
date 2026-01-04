@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://dj5wvytfgregu"]
+
+[ext_resource type="Script" uid="uid://ci2u0tqkc7ott" path="res://Scripts/Components/weakness_icon.gd" id="1_mbsdc"]
+[ext_resource type="Texture2D" uid="uid://dkoy7rxrlpl1j" path="res://Assets/Art/Test/equipment_slot_icon_placeholder.png" id="1_wauci"]
+[ext_resource type="Texture2D" uid="uid://b7ffce0emnjpx" path="res://Assets/Art/Test/equipment_slot_active_icon_placeholder.png" id="2_s01iv"]
+[ext_resource type="Texture2D" uid="uid://bty3wf87usjom" path="res://Assets/Art/Test/equipment_slot_hover_icon_placeholder.png" id="3_eidru"]
+[ext_resource type="FontFile" uid="uid://b6ruw17j2xoxj" path="res://Assets/Fonts/AndyBold.OTF" id="5_eidru"]
+
+[node name="WeaknessIcon" type="Control"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+mouse_filter = 1
+script = ExtResource("1_mbsdc")
+weakness_icons_textures = Array[Texture2D]([ExtResource("2_s01iv"), ExtResource("3_eidru"), ExtResource("1_wauci")])
+weakness_font = ExtResource("5_eidru")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WeaknessIconTexture" type="TextureRect" parent="HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+texture = ExtResource("1_wauci")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="WeaknessLabel" type="RichTextLabel" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+bbcode_enabled = true
+text = "Weak to fire"
+vertical_alignment = 2
+
+[connection signal="mouse_entered" from="HBoxContainer/WeaknessIconTexture" to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="HBoxContainer/WeaknessIconTexture" to="." method="_on_mouse_exited"]

@@ -7,5 +7,5 @@ script = ExtResource("1_dpqj3")
 base_folder = "res://Data/Equipment"
 includes = Array[String](["*.tres"])
 excludes = Array[String]([])
-paths = Array[String](["res://Data/Equipment/test_boot.tres", "res://Data/Equipment/test_helmet.tres", "res://Data/Equipment/test_suit.tres", "res://Data/Equipment/test_weapon.tres"])
+paths = Array[String](["res://Data/Equipment/test_boot.tres", "res://Data/Equipment/test_boot_fire.tres", "res://Data/Equipment/test_helmet.tres", "res://Data/Equipment/test_helmet_fire.tres", "res://Data/Equipment/test_suit.tres", "res://Data/Equipment/test_suit_fire.tres", "res://Data/Equipment/test_weapon.tres", "res://Data/Equipment/test_weapon_fire.tres"])
 metadata/_custom_type_script = "uid://bpvewngi4o2g5"

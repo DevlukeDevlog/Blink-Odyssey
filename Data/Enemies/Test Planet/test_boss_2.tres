@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnemyTemplate" load_steps=4 format=3 uid="uid://c5maryk7gsrpv"]
+
+[ext_resource type="Script" uid="uid://bc56friqt0408" path="res://Scripts/Resources/equipment_template.gd" id="1_5y557"]
+[ext_resource type="Texture2D" uid="uid://da5k5fgpixl8t" path="res://Assets/Art/Test/enemy_placeholder_3.png" id="2_7bgf6"]
+[ext_resource type="Script" uid="uid://bnb77ygf1dd3i" path="res://Scripts/Resources/enemy_template.gd" id="3_o25wn"]
+
+[resource]
+script = ExtResource("3_o25wn")
+enemy_type = 1
+enemy_name = "Test Boss 2"
+enemy_base_max_health = 25
+enemy_weakness = 1
+enemy_base_min_reward = 100
+enemy_possible_equipment_drops = Array[ExtResource("1_5y557")]([])
+enemy_timer = 200
+enemy_texture = ExtResource("2_7bgf6")
+metadata/_custom_type_script = "uid://bnb77ygf1dd3i"

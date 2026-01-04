@@ -21,7 +21,14 @@ func Setup() -> void:
 	Set_Reward()
 
 func Take_Damage(damage: int) -> void:
-	enemy_current_health = clampi(enemy_current_health - damage, 0, enemy_base_max_health)
+	var attribute_multiplier := 1.0
+	for gear in DataManager.equiped_gear:
+		if (gear.equipment_attribute == ENEMY_WEAKNESS.NONE): return
+		if (gear.equipment_attribute == enemy_weakness):
+			attribute_multiplier += 0.2
+	
+	var total_damage := roundi(damage * attribute_multiplier)
+	enemy_current_health = clampi(enemy_current_health - total_damage, 0, enemy_base_max_health)
 
 func Is_Defeated() -> bool:
 	if (enemy_current_health != 0): return false
@@ -44,3 +51,16 @@ func Set_Reward(multiplier := 1.0) -> void:
 	current_reward = roundi(enemy_base_min_reward * multiplier)
 
 func Get_Reward() -> int: return current_reward 
+
+func Get_Weakness_Name() -> String:
+	match enemy_weakness:
+		ENEMY_WEAKNESS.NONE:
+			return ""
+		ENEMY_WEAKNESS.FIRE:
+			return "Fire"
+		ENEMY_WEAKNESS.DARK:
+			return "Dark"
+		ENEMY_WEAKNESS.LIGHT:
+			return "Light"
+		_:
+			return "Unknown"

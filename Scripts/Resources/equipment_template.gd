@@ -33,3 +33,16 @@ func Update_Power() -> void:
 	if (upgrade_item != null):
 		bonus_power = upgrade_item.Get_Bonus_Power()
 	equipment_current_attack_power = bonus_power + equipment_current_attack_base_power
+
+func Get_Attribute_Name() -> String:
+	match equipment_attribute:
+		EQUIPMENT_ATTRIBUTE.NONE:
+			return ""
+		EQUIPMENT_ATTRIBUTE.FIRE:
+			return "(Fire)"
+		EQUIPMENT_ATTRIBUTE.DARK:
+			return "(Dark)"
+		EQUIPMENT_ATTRIBUTE.LIGHT:
+			return "(Light)"
+		_:
+			return "(Unknown)"

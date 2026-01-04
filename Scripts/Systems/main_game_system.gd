@@ -16,6 +16,7 @@ extends Control
 @onready var enemy_name_label: Label = %EnemyNameLabel
 @onready var enemy_texture: TextureRect = %EnemyTexture
 @onready var enemy_health_bar: ProgressBar = %EnemyHealthBar
+@onready var weakness_container = %WeaknessContainer
 
 # Mission Log UI
 @onready var mission_log_label: RichTextLabel = %MissionLogLabel
@@ -102,6 +103,14 @@ func _setup_enemy(new_enemy: EnemyTemplate) -> void:
 	var enemy_reward_multiplier := randf_range(_current_mission.min_reward_multiplier, _current_mission.max_reward_multiplier)
 	new_enemy.Set_Reward(enemy_reward_multiplier)
 	
+	for child in weakness_container.get_children():
+		child.free()
+	
+	if (new_enemy.enemy_weakness != new_enemy.ENEMY_WEAKNESS.NONE):
+		var weakness_icon := ComponentsManager.WEAKNESS_ICON.instantiate()
+		weakness_icon.enemy = new_enemy
+		weakness_container.add_child(weakness_icon)
+	
 	_current_enemy = new_enemy
 
 # UI
@@ -164,7 +173,7 @@ func _update_selected_equiment_ui(selected_equipment: EquipmentTemplate = null) 
 		actions_inventory_container.visible = false
 	else:
 		_selected_equipment = selected_equipment
-		selected_equipment_label.text = _selected_equipment.equipment_name
+		selected_equipment_label.text = str(_selected_equipment.equipment_name, " ", _selected_equipment.Get_Attribute_Name()) 
 		
 		var improved_power_text := ""
 		
@@ -288,7 +297,7 @@ func _on_equip_button_pressed():
 	_update_selected_equiment_ui(_selected_equipment)
 
 func _on_damage_timer_timeout() -> void:
-	if (_current_enemy != null):
+	if (_current_enemy != null and DataManager.Get("dps") > 0):
 		_current_enemy.Take_Damage(DataManager.Get("dps"))
 		_attack()
 

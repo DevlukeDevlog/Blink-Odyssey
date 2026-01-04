@@ -1,9 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://bvy50pyfmcs3v"]
+[gd_scene load_steps=18 format=3 uid="uid://bvy50pyfmcs3v"]
 
 [ext_resource type="Texture2D" uid="uid://be0u4714bpo2s" path="res://Assets/Art/Test/player_placeholder.png" id="1_52fb6"]
 [ext_resource type="FontFile" uid="uid://b6ruw17j2xoxj" path="res://Assets/Fonts/AndyBold.OTF" id="1_iacmt"]
 [ext_resource type="Script" uid="uid://ckmiv6sa03ak2" path="res://Scripts/Systems/main_game_system.gd" id="1_maf8m"]
-[ext_resource type="Resource" uid="uid://c3a7gfpbevcxy" path="res://Data/Missions/planet_1.tres" id="2_huasi"]
+[ext_resource type="Resource" uid="uid://dsatql1dhotmk" path="res://Data/Missions/planet_2.tres" id="2_lhp3t"]
 [ext_resource type="Resource" uid="uid://bppsxnc21jib2" path="res://Data/IdleUpgrades.tres" id="3_7ewk0"]
 [ext_resource type="Theme" uid="uid://chweu1s0cwtc7" path="res://Assets/Themes/panel_placeholder.tres" id="3_76v2p"]
 [ext_resource type="Texture2D" uid="uid://twydswvdv708" path="res://Assets/Art/Test/background_placeholder.png" id="3_jv6wh"]
@@ -13,6 +13,7 @@
 [ext_resource type="Theme" uid="uid://6d11oaqdfr8f" path="res://Assets/Themes/button_placeholder.tres" id="6_huasi"]
 [ext_resource type="FontFile" uid="uid://dt2r8hvmcxm2" path="res://Assets/Fonts/AndyRegular.OTF" id="9_m1efj"]
 [ext_resource type="PackedScene" uid="uid://dlyf3e0iv77o2" path="res://Scenes/Components/equipment_slot.tscn" id="9_mai8y"]
+[ext_resource type="PackedScene" uid="uid://dj5wvytfgregu" path="res://Scenes/Components/weakness_icon.tscn" id="11_gnsmo"]
 [ext_resource type="PackedScene" uid="uid://d0s0ljl3yflo0" path="res://Scenes/Components/upgrade_slot.tscn" id="12_drdnd"]
 [ext_resource type="Script" uid="uid://dmrxncry7byct" path="res://Scripts/Systems/upgrade_system.gd" id="12_ioaeq"]
 
@@ -26,7 +27,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_maf8m")
-mission = ExtResource("2_huasi")
+mission = ExtResource("2_lhp3t")
 idle_upgrades = ExtResource("3_7ewk0")
 equipment_list = ExtResource("4_lhp3t")
 
@@ -268,18 +269,29 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="BackgroundTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer"]
+[node name="AttackButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer"]
+unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
+focus_mode = 0
+mouse_filter = 1
+
+[node name="BackgroundTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton"]
+layout_mode = 2
+offset_right = 274.0
+offset_bottom = 385.0
 texture = ExtResource("3_jv6wh")
 stretch_mode = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton"]
+layout_mode = 2
+offset_right = 274.0
+offset_bottom = 385.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton/VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="EnemyNameLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="EnemyNameLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
@@ -287,7 +299,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iacmt")
 text = "Grifindor"
 
-[node name="MissionProgressLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="MissionProgressLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
@@ -297,19 +309,27 @@ theme_override_fonts/font = ExtResource("1_iacmt")
 text = "0 / 10"
 horizontal_alignment = 2
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer"]
+[node name="WeaknessContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="WeaknessIcon" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton/VBoxContainer/WeaknessContainer" instance=ExtResource("11_gnsmo")]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton/VBoxContainer"]
+visible = false
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="EnemyTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer"]
+[node name="EnemyTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 texture = ExtResource("4_x6ack")
 expand_mode = 5
 
-[node name="EnemyHealthBar" type="ProgressBar" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/VBoxContainer"]
+[node name="EnemyHealthBar" type="ProgressBar" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
@@ -317,12 +337,6 @@ size_flags_vertical = 10
 step = 1.0
 value = 50.0
 show_percentage = false
-
-[node name="AttackButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer"]
-unique_name_in_owner = true
-self_modulate = Color(1, 1, 1, 0)
-layout_mode = 2
-focus_mode = 0
 
 [node name="RightBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene"]
 custom_minimum_size = Vector2(200, 0)
@@ -903,6 +917,7 @@ text = "NeoForge"
 
 [node name="PopupScreen" type="Panel" parent="MarginContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PopupScreen"]
@@ -954,6 +969,7 @@ text = "Close"
 
 [node name="ConfirmationScreen" type="Panel" parent="MarginContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ConfirmationScreen"]
