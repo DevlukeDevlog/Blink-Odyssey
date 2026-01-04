@@ -21,9 +21,9 @@ var equipment_current_attack_power := 2
 func Sell_Equipment() -> void:
 	DataManager.Set("gold", DataManager.current_player_gold + equipment_sell_price)
 
-func Set_Power() -> void:
+func Set_Power(difficulty_multiplier := 1.0) -> void:
 	var multiplier := randf_range(equipment_min_multiplier_attack, equipment_max_multiplier_attack)
-	equipment_current_attack_base_power = int(round(equipment_base_attack_power * multiplier))
+	equipment_current_attack_base_power = int(round(equipment_base_attack_power * multiplier * difficulty_multiplier))
 	equipment_current_attack_power = equipment_current_attack_base_power
 	Update_Power()
 

@@ -16,14 +16,18 @@ enum ENEMY_WEAKNESS {NONE, FIRE, DARK, LIGHT}
 var current_reward := 10
 var enemy_current_health := 10
 
-func Setup() -> void:
+func Setup(mission: MissionTemplate) -> void:
+	var difficulty_multiplier = 1.0 + (((DataManager.Get("difficulty") - 1) *  mission.difficulty_add_bonus) * 10)
+	enemy_base_max_health = int(enemy_base_max_health * difficulty_multiplier)
 	enemy_current_health = enemy_base_max_health
-	Set_Reward()
+	
+	var reward_multiplier = 1.0 + (((DataManager.Get("difficulty") - 1) *  mission.difficulty_add_bonus) * 10)
+	enemy_base_min_reward = int(enemy_base_min_reward * reward_multiplier)
 
 func Take_Damage(damage: int) -> void:
 	var attribute_multiplier := 1.0
 	for gear in DataManager.equiped_gear:
-		if (gear.equipment_attribute == ENEMY_WEAKNESS.NONE): return
+		if (gear.equipment_attribute == ENEMY_WEAKNESS.NONE): break
 		if (gear.equipment_attribute == enemy_weakness):
 			attribute_multiplier += 0.2
 	
@@ -35,14 +39,16 @@ func Is_Defeated() -> bool:
 	DataManager.Set("gold", DataManager.current_player_gold + Get_Reward())
 	return true
 
-func Possible_Drop() -> String:
+func Possible_Drop(mission: MissionTemplate) -> String:
 	for equipment in enemy_possible_equipment_drops:
 		var chance := randf()
 		if (chance < equipment.equipment_drop_chance):
 			var new_equipment: EquipmentTemplate = equipment.duplicate()
 			if (DataManager.Get_Upgrade_Item(new_equipment.equipment_name) == null):
 				DataManager.Add_To_Upgrade_List(new_equipment)
-			new_equipment.Set_Power()
+			
+			var difficulty_multiplier = 1.0 + (((DataManager.Get("difficulty") - 1) *  mission.difficulty_add_bonus) * 6)
+			new_equipment.Set_Power(difficulty_multiplier)
 			DataManager.Add_To_Inventory(new_equipment)
 			return equipment.equipment_name
 	return ""

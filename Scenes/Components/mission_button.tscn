@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://dedqxbwuhyjuc"]
+
+[ext_resource type="Theme" uid="uid://6d11oaqdfr8f" path="res://Assets/Themes/button_placeholder.tres" id="1_ueq62"]
+[ext_resource type="Script" uid="uid://bvg2etr3v0ick" path="res://Scripts/Components/mission_button.gd" id="2_ermhc"]
+
+[node name="MissionButton" type="Button"]
+custom_minimum_size = Vector2(200, 30)
+offset_right = 200.0
+offset_bottom = 20.0
+size_flags_horizontal = 0
+theme = ExtResource("1_ueq62")
+text = "Planet 1"
+script = ExtResource("2_ermhc")
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

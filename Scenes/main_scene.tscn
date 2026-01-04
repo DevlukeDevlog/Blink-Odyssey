@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bvy50pyfmcs3v"]
+[gd_scene load_steps=20 format=3 uid="uid://bvy50pyfmcs3v"]
 
 [ext_resource type="Texture2D" uid="uid://be0u4714bpo2s" path="res://Assets/Art/Test/player_placeholder.png" id="1_52fb6"]
 [ext_resource type="FontFile" uid="uid://b6ruw17j2xoxj" path="res://Assets/Fonts/AndyBold.OTF" id="1_iacmt"]
@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://bppsxnc21jib2" path="res://Data/IdleUpgrades.tres" id="3_7ewk0"]
 [ext_resource type="Theme" uid="uid://chweu1s0cwtc7" path="res://Assets/Themes/panel_placeholder.tres" id="3_76v2p"]
 [ext_resource type="Texture2D" uid="uid://twydswvdv708" path="res://Assets/Art/Test/background_placeholder.png" id="3_jv6wh"]
+[ext_resource type="Resource" uid="uid://b8k4hjy7buqvj" path="res://Data/Missions.tres" id="3_psl12"]
 [ext_resource type="Resource" uid="uid://dxdruj140uhi5" path="res://Data/EquipmentTemplates.tres" id="4_lhp3t"]
 [ext_resource type="Texture2D" uid="uid://dpg4o5v1ib18h" path="res://Assets/Art/Test/enemy_placeholder_1.png" id="4_x6ack"]
 [ext_resource type="Texture2D" uid="uid://dkoy7rxrlpl1j" path="res://Assets/Art/Test/equipment_slot_icon_placeholder.png" id="5_m1efj"]
@@ -16,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://dj5wvytfgregu" path="res://Scenes/Components/weakness_icon.tscn" id="11_gnsmo"]
 [ext_resource type="PackedScene" uid="uid://d0s0ljl3yflo0" path="res://Scenes/Components/upgrade_slot.tscn" id="12_drdnd"]
 [ext_resource type="Script" uid="uid://dmrxncry7byct" path="res://Scripts/Systems/upgrade_system.gd" id="12_ioaeq"]
+[ext_resource type="PackedScene" uid="uid://dedqxbwuhyjuc" path="res://Scenes/Components/mission_button.tscn" id="14_2ebs2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ia5b"]
 
@@ -28,6 +30,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_maf8m")
 mission = ExtResource("2_lhp3t")
+all_missions = ExtResource("3_psl12")
 idle_upgrades = ExtResource("3_7ewk0")
 equipment_list = ExtResource("4_lhp3t")
 
@@ -198,7 +201,7 @@ focus_mode = 0
 theme = ExtResource("6_huasi")
 theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 24
-text = "New Mission"
+text = "Missions"
 
 [node name="MissionLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/MissionBox/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -255,43 +258,53 @@ theme_override_constants/separation = 16
 [node name="CenterBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene"]
 layout_mode = 2
 
-[node name="EnemyBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 3
 theme = ExtResource("3_76v2p")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="AttackButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer"]
+[node name="EnemyScene" type="Control" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="AttackButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene"]
 unique_name_in_owner = true
 self_modulate = Color(1, 1, 1, 0)
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 focus_mode = 0
 mouse_filter = 1
 
-[node name="BackgroundTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton"]
+[node name="BackgroundTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton"]
 layout_mode = 2
 offset_right = 274.0
 offset_bottom = 385.0
 texture = ExtResource("3_jv6wh")
 stretch_mode = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton"]
 layout_mode = 2
 offset_right = 274.0
 offset_bottom = 385.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton/VBoxContainer"]
 layout_mode = 2
 
-[node name="EnemyNameLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton/VBoxContainer/HBoxContainer"]
+[node name="EnemyNameLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
@@ -299,7 +312,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iacmt")
 text = "Grifindor"
 
-[node name="MissionProgressLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton/VBoxContainer/HBoxContainer"]
+[node name="MissionProgressLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
@@ -309,27 +322,27 @@ theme_override_fonts/font = ExtResource("1_iacmt")
 text = "0 / 10"
 horizontal_alignment = 2
 
-[node name="WeaknessContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton/VBoxContainer"]
+[node name="WeaknessContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="WeaknessIcon" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton/VBoxContainer/WeaknessContainer" instance=ExtResource("11_gnsmo")]
+[node name="WeaknessIcon" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton/VBoxContainer/WeaknessContainer" instance=ExtResource("11_gnsmo")]
 layout_mode = 2
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton/VBoxContainer"]
 visible = false
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="EnemyTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton/VBoxContainer"]
+[node name="EnemyTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_vertical = 10
 texture = ExtResource("4_x6ack")
 expand_mode = 5
 
-[node name="EnemyHealthBar" type="ProgressBar" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton/VBoxContainer"]
+[node name="EnemyHealthBar" type="ProgressBar" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
@@ -337,6 +350,57 @@ size_flags_vertical = 10
 step = 1.0
 value = 50.0
 show_percentage = false
+
+[node name="MissionsScene" type="Control" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/MissionsScene"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/MissionsScene/VBoxContainer"]
+texture_filter = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 24
+text = "Missions"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/MissionsScene/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/MissionsScene/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="MissionsContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/MissionsScene/VBoxContainer/ScrollContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="MissionButton" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/MissionsScene/VBoxContainer/ScrollContainer/MarginContainer/MissionsContainer" instance=ExtResource("14_2ebs2")]
+layout_mode = 2
+
+[node name="MissionButton2" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/MissionsScene/VBoxContainer/ScrollContainer/MarginContainer/MissionsContainer" instance=ExtResource("14_2ebs2")]
+layout_mode = 2
+text = "Planet 2"
 
 [node name="RightBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene"]
 custom_minimum_size = Vector2(200, 0)
@@ -995,7 +1059,7 @@ theme_override_constants/margin_bottom = 16
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ConfirmationScreen/MarginContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="OfflineEarningsLabel" type="Label" parent="MarginContainer/ConfirmationScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/ConfirmationScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
 texture_filter = 2
 layout_mode = 2
 size_flags_vertical = 3
@@ -1033,9 +1097,210 @@ theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 16
 text = "Okay maybe not"
 
+[node name="MissionClearedScreen" type="Panel" parent="MarginContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MissionClearedScreen"]
+layout_mode = 2
+offset_right = 1120.0
+offset_bottom = 616.0
+theme_override_constants/margin_left = 350
+theme_override_constants/margin_top = 180
+theme_override_constants/margin_right = 350
+theme_override_constants/margin_bottom = 250
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/MissionClearedScreen/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("3_76v2p")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MissionClearedScreen/MarginContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MissionClearedScreen/MarginContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/MissionClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+texture_filter = 2
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 24
+text = "You completed the mission!
+Want to redo the mission?
+Or start a new mission?"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MissionClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="RedoMissionButton" type="Button" parent="MarginContainer/MissionClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+texture_filter = 2
+custom_minimum_size = Vector2(150, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("6_huasi")
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 16
+text = "Redo Mission"
+
+[node name="NewMissionButton" type="Button" parent="MarginContainer/MissionClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+texture_filter = 2
+custom_minimum_size = Vector2(150, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("6_huasi")
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 16
+text = "Check Missions"
+
+[node name="FinalBossClearedScreen" type="Panel" parent="MarginContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/FinalBossClearedScreen"]
+layout_mode = 2
+offset_right = 1120.0
+offset_bottom = 616.0
+theme_override_constants/margin_left = 350
+theme_override_constants/margin_top = 180
+theme_override_constants/margin_right = 350
+theme_override_constants/margin_bottom = 250
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/FinalBossClearedScreen/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("3_76v2p")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/FinalBossClearedScreen/MarginContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/FinalBossClearedScreen/MarginContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/FinalBossClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+texture_filter = 2
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 24
+text = "You cleared all missions!
+Want to redo a mission?
+Or try again but harder?"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/FinalBossClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="NewMissionButton" type="Button" parent="MarginContainer/FinalBossClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+texture_filter = 2
+custom_minimum_size = Vector2(150, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("6_huasi")
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 16
+text = "Check Missions"
+
+[node name="ChallangeMissionButton" type="Button" parent="MarginContainer/FinalBossClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+texture_filter = 2
+custom_minimum_size = Vector2(150, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("6_huasi")
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 16
+text = "Take on the challenge"
+
+[node name="GameWonScreen" type="Panel" parent="MarginContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/GameWonScreen"]
+layout_mode = 2
+offset_right = 1120.0
+offset_bottom = 616.0
+theme_override_constants/margin_left = 350
+theme_override_constants/margin_top = 180
+theme_override_constants/margin_right = 350
+theme_override_constants/margin_bottom = 250
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/GameWonScreen/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("3_76v2p")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/GameWonScreen/MarginContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/GameWonScreen/MarginContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/GameWonScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+texture_filter = 2
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 24
+text = "You defeated the last boss!
+Well done you saved the world
+What now?"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/GameWonScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="ResetButton" type="Button" parent="MarginContainer/GameWonScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+texture_filter = 2
+custom_minimum_size = Vector2(150, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("6_huasi")
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 16
+text = "Start Over?"
+
+[node name="QuitButton" type="Button" parent="MarginContainer/GameWonScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+texture_filter = 2
+custom_minimum_size = Vector2(150, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("6_huasi")
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 16
+text = "Quit the Game?"
+
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/MissionBox/MarginContainer/VBoxContainer/MissionSelectButton" to="." method="_on_mission_select_button_pressed"]
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/InventoryBox/MarginContainer/VBoxContainer/InventoryOpenButton" to="." method="_on_inventory_open_button_pressed"]
-[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton" to="." method="_on_attack_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton" to="." method="_on_attack_button_pressed"]
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/RightBoxContainer/SettingsBox/MarginContainer/VBoxContainer/OptionsButton" to="." method="_on_options_button_pressed"]
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/RightBoxContainer/SettingsBox/MarginContainer/VBoxContainer/OptionOpenActions/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/RightBoxContainer/SettingsBox/MarginContainer/VBoxContainer/OptionOpenActions/QuitButton" to="." method="_on_quit_button_pressed"]
@@ -1049,6 +1314,12 @@ text = "Okay maybe not"
 [connection signal="pressed" from="MarginContainer/PopupScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]
 [connection signal="pressed" from="MarginContainer/ConfirmationScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/AcceptRestartButton" to="." method="_on_accept_restart_button_pressed"]
 [connection signal="pressed" from="MarginContainer/ConfirmationScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CloseRestartButton" to="." method="_on_close_restart_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MissionClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/RedoMissionButton" to="." method="_on_redo_mission_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MissionClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/NewMissionButton" to="." method="_on_new_mission_button_pressed"]
+[connection signal="pressed" from="MarginContainer/FinalBossClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/NewMissionButton" to="." method="_on_new_mission_button_pressed"]
+[connection signal="pressed" from="MarginContainer/FinalBossClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ChallangeMissionButton" to="." method="_on_challange_mission_button_pressed"]
+[connection signal="pressed" from="MarginContainer/GameWonScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ResetButton" to="." method="_on_reset_button_pressed"]
+[connection signal="pressed" from="MarginContainer/GameWonScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
 
 [editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/PlayerUpgrades/PanelContainer/MarginContainer/PlayerUpgradesContainer/UpgradeSlot"]
 [editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/EquipmentUpgradesContainer/UpgradeSlot"]

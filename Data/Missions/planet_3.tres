@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="MissionTemplate" load_steps=8 format=3 uid="uid://b1yhwkyds0mm2"]
+
+[ext_resource type="Resource" uid="uid://c5maryk7gsrpv" path="res://Data/Enemies/Test Planet/test_boss_2.tres" id="1_g1ppd"]
+[ext_resource type="Script" uid="uid://bnb77ygf1dd3i" path="res://Scripts/Resources/enemy_template.gd" id="2_v3ibb"]
+[ext_resource type="Resource" uid="uid://cyeyguppl13o8" path="res://Data/Enemies/Test Planet/test_enemy_1.tres" id="3_vw3s4"]
+[ext_resource type="Resource" uid="uid://bun2a2m4lf2sv" path="res://Data/Enemies/Test Planet/test_enemy_4.tres" id="4_sgpkj"]
+[ext_resource type="Resource" uid="uid://oqlncw1sooep" path="res://Data/Enemies/Test Planet/test_enemy_3.tres" id="5_wlacm"]
+[ext_resource type="Resource" uid="uid://cfh88dl2a2fti" path="res://Data/Enemies/Test Planet/test_enemy_2.tres" id="6_symmf"]
+[ext_resource type="Script" uid="uid://16q82vg7uq8d" path="res://Scripts/Resources/mission_template.gd" id="7_ljebl"]
+
+[resource]
+script = ExtResource("7_ljebl")
+mission_name = "Planet 3"
+mission_enemies = Array[ExtResource("2_v3ibb")]([ExtResource("3_vw3s4"), ExtResource("4_sgpkj"), ExtResource("5_wlacm"), ExtResource("6_symmf"), ExtResource("3_vw3s4"), ExtResource("4_sgpkj"), ExtResource("5_wlacm"), ExtResource("4_sgpkj"), ExtResource("6_symmf"), ExtResource("4_sgpkj")])
+mission_boss = ExtResource("1_g1ppd")
+min_reward_multiplier = 1.0
+max_reward_multiplier = 1.5
+difficulty_add_bonus = 0.2
+metadata/_custom_type_script = "uid://16q82vg7uq8d"

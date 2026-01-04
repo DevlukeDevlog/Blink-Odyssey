@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ResourceGroup" load_steps=2 format=3 uid="uid://b8k4hjy7buqvj"]
+
+[ext_resource type="Script" uid="uid://bpvewngi4o2g5" path="res://addons/godot_resource_groups/resource_group.gd" id="1_m5f0h"]
+
+[resource]
+script = ExtResource("1_m5f0h")
+base_folder = "res://Data/Missions"
+includes = Array[String](["*.tres"])
+excludes = Array[String]([])
+paths = Array[String](["res://Data/Missions/planet_1.tres", "res://Data/Missions/planet_2.tres", "res://Data/Missions/planet_3.tres", "res://Data/Missions/planet_final.tres"])
+metadata/_custom_type_script = "uid://bpvewngi4o2g5"

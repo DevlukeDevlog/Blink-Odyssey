@@ -1,3 +1,4 @@
+class_name MainScene
 extends Control
 
 # Game UI
@@ -18,8 +19,10 @@ extends Control
 @onready var enemy_health_bar: ProgressBar = %EnemyHealthBar
 @onready var weakness_container = %WeaknessContainer
 
-# Mission Log UI
+# Mission UI
 @onready var mission_log_label: RichTextLabel = %MissionLogLabel
+@onready var missions_container = %MissionsContainer
+@onready var mission_select_button = %MissionSelectButton
 
 # Inventory UI
 @onready var selected_equipment_label = %SelectedEquipmentLabel
@@ -37,14 +40,20 @@ extends Control
 @onready var popup_screen = %PopupScreen
 @onready var offline_earnings_label = %OfflineEarningsLabel
 @onready var confirmation_screen = %ConfirmationScreen
+@onready var mission_cleared_screen = %MissionClearedScreen
+@onready var final_boss_cleared_screen = %FinalBossClearedScreen
 
 # Scenes
 @onready var game_play_scene = %GamePlayScene
 @onready var clicker_scene = %ClickerScene
 @onready var inventory_scene = %InventoryScene
 @onready var upgrade_scene: UpgradeSystem = %UpgradeScene
+@onready var missions_scene = %MissionsScene
+@onready var enemy_scene = %EnemyScene
+@onready var game_won_screen = %GameWonScreen
 
 @export var mission: MissionTemplate = null
+@export var all_missions: ResourceGroup = null
 @export var idle_upgrades: ResourceGroup = null
 @export var equipment_list: ResourceGroup = null
 
@@ -56,6 +65,7 @@ var _selected_equipment: EquipmentTemplate = null
 var _damage_timer := Timer.new()
 
 func _ready() -> void:
+	SceneManager.Set_Current_Scene(SceneManager.SCENES.CLICK)
 	_setup_game()
 	DataManager.select_equipment.connect(_update_selected_equiment_ui)
 
@@ -63,16 +73,34 @@ func _ready() -> void:
 func _setup_game() -> void:
 	DataManager.Load_Equipment_Templates(equipment_list)
 	DataManager.Load_Idle_Templates(idle_upgrades)
+	DataManager.Load_Missions(all_missions)
 	DataManager.Create_Idle_Upgrades()
 	DataManager.Load_Data()
+	
 	confirmation_screen.hide()
+	mission_cleared_screen.hide()
+	final_boss_cleared_screen.hide()
+	game_won_screen.hide()
+	
+	if (DataManager.Get_Current_Mission() == null and mission != null):
+		DataManager.Set_Current_Mission(mission)
+	else:
+		mission = DataManager.Get_Current_Mission()
+	
+	if (!DataManager.unlocked_missions.has(mission.mission_name)):
+		DataManager.unlocked_missions.append(mission.mission_name)
 	
 	_popup_ui()
 	
 	if (mission):
 		_current_mission = mission.duplicate()
 		_setup_signals()
-		_setup_enemy(_current_mission.mission_enemies[0])
+		
+		if (_current_mission.mission_enemies.size() > 0):
+			_setup_enemy(_current_mission.mission_enemies[0])
+		else:
+			_on_boss_battle = true
+			_setup_enemy(_current_mission.mission_boss)
 		_update_game_ui()
 		_update_enemy_ui()
 		_update_player_ui()
@@ -92,9 +120,11 @@ func _setup_signals() -> void:
 	DataManager.update_ui.connect(_update_gear_ui)
 	DataManager.update_ui.connect(_update_inventory_ui)
 	DataManager.update_ui.connect(upgrade_scene.Update_UI)
+	DataManager.select_mission.connect(_reset_game)
 
-func _setup_enemy(new_enemy: EnemyTemplate) -> void:
-	new_enemy.Setup()
+func _setup_enemy(enemy: EnemyTemplate) -> void:
+	var new_enemy := enemy.duplicate()
+	new_enemy.Setup(_current_mission)
 	enemy_health_bar.max_value = new_enemy.enemy_base_max_health
 	enemy_health_bar.value = new_enemy.enemy_base_max_health
 	enemy_texture.texture = new_enemy.enemy_texture
@@ -122,12 +152,11 @@ func _popup_ui() -> void:
 		popup_screen.show()
 
 func _update_enemy_ui() -> void:
+	mission_progress_label.text = ""
 	if (_current_enemy == null): return
+	
 	enemy_health_bar.visible = true
 	enemy_health_bar.value = _current_enemy.enemy_current_health
-	if (_mission_completed):
-		mission_progress_label.text = ""
-		return
 	
 	var current_mission_progress = mission.Get_Mission_Size() - _current_mission.Get_Mission_Size() + 1
 	if (_on_boss_battle):
@@ -193,6 +222,8 @@ func _update_selected_equiment_ui(selected_equipment: EquipmentTemplate = null) 
 func _update_game_ui() -> void:
 	var scene := SceneManager.Get_Current_Scene()
 	game_play_scene.show()
+	enemy_scene.hide()
+	missions_scene.hide()
 	inventory_scene.hide()
 	clicker_scene.hide()
 	upgrade_scene.hide()
@@ -200,13 +231,17 @@ func _update_game_ui() -> void:
 	match scene:
 		SceneManager.SCENES.CLICK:
 			clicker_scene.show()
+			enemy_scene.show()
 		SceneManager.SCENES.INVENTORY:
 			inventory_scene.show()
 		SceneManager.SCENES.UPGRADE:
 			game_play_scene.hide()
 			upgrade_scene.show()
+		SceneManager.SCENES.MISSIONS:
+			clicker_scene.show()
+			missions_scene.show()
 	
-	mission_label.text = _current_mission.mission_name
+	mission_label.text = DataManager.Get("mission")
 	gold_label.text = str(FormatManager.format_number(DataManager.Get("gold")), " Gold")
 	inventory_size_label.text = str(FormatManager.format_number(DataManager.inventory.size()), " Items")
 
@@ -218,9 +253,48 @@ func _clear_enemy_ui() -> void:
 	enemy_texture.texture = null
 	enemy_name_label.text = ""
 	enemy_health_bar.visible = false
+	for child in weakness_container.get_children():
+		child.free()
+	
+	if (_current_mission.unlock_mission != null):
+		if (!DataManager.unlocked_missions.has(_current_mission.unlock_mission.mission_name)):
+			DataManager.unlocked_missions.append(_current_mission.unlock_mission.mission_name)
+	
+	var available_missions: Array[MissionTemplate] = []
+	for data_mission in DataManager.missions:
+		if (data_mission.mission_enemies.size() == 0):
+			if (DataManager.FINAL_DIFFICULTY != DataManager.Get("difficulty")):
+				break
+		available_missions.append(data_mission)
+	
+	var last_mission := available_missions.back() as MissionTemplate
+	if (_current_mission.mission_name == last_mission.mission_name):
+		if (_current_mission.mission_enemies.size() > 0):
+			final_boss_cleared_screen.show()
+		else:
+			game_won_screen.show()
+	else:
+		if (_current_mission.unlock_mission == null):
+			if (!DataManager.unlocked_missions.has(last_mission.mission_name)):
+				DataManager.unlocked_missions.append(last_mission.mission_name)
+		mission_cleared_screen.show()
+
+func _update_missions_ui() -> void:
+	for child in missions_container.get_children():
+		child.free()
+	
+	for data_mission in DataManager.missions:
+		if (data_mission.mission_enemies.size() == 0):
+			if (DataManager.FINAL_DIFFICULTY != DataManager.Get("difficulty")):
+				return
+		
+		var mission_button := ComponentsManager.MISSION_BUTTON.instantiate()
+		mission_button.mission = data_mission
+		mission_button.pressed.connect(_reset_buttons)
+		missions_container.add_child(mission_button)
 
 # Helpers
-func _attack() -> void:
+func _check_defeated() -> void:
 	if (_current_enemy.Is_Defeated()):
 		var enemies := _current_mission.mission_enemies
 		if (_on_boss_battle):
@@ -229,7 +303,7 @@ func _attack() -> void:
 			_update_mission_log_ui(str("Defeated ", _current_enemy.enemy_name))
 		_update_mission_log_ui(str("Gained ", FormatManager.format_number(_current_enemy.Get_Reward()), " Gold"))
 		
-		var drop_name = _current_enemy.Possible_Drop()
+		var drop_name = _current_enemy.Possible_Drop(_current_mission)
 		if (drop_name != ""):
 			_update_mission_log_ui(str("Picked up (", drop_name, ")"))
 		
@@ -248,9 +322,34 @@ func _attack() -> void:
 		
 	_update_enemy_ui()
 
+func _reset_game() -> void:
+	if (_mission_completed):
+		_current_mission = DataManager.Get_Current_Mission().duplicate()
+		_mission_completed = false
+		_on_boss_battle = false
+		
+		var enemies := _current_mission.mission_enemies
+		if (enemies.size() > 0):
+			_setup_enemy(_current_mission.mission_enemies[0])
+		else:
+			_setup_enemy(_current_mission.mission_boss)
+			_on_boss_battle = true
+	_update_enemy_ui()
+
+func _reset_buttons() -> void:
+	inventory_open_button.text = "Inventory"
+	mission_select_button.text = "Missions"
+
 # Buttons
 func _on_mission_select_button_pressed() -> void:
-	pass # Replace with function body.
+	_reset_buttons()
+	if (SceneManager.Get_Current_Scene() != SceneManager.SCENES.MISSIONS):
+		SceneManager.Set_Current_Scene(SceneManager.SCENES.MISSIONS)
+		mission_select_button.text = "Close Missions"
+		_update_missions_ui()
+	else:
+		SceneManager.Set_Current_Scene(SceneManager.SCENES.CLICK)
+	_update_game_ui()
 
 func _on_options_button_pressed() -> void:
 	option_open_actions.visible = !option_open_actions.visible 
@@ -260,6 +359,7 @@ func _on_options_button_pressed() -> void:
 		options_button.text = "Options"
 
 func _on_upgrade_button_pressed() -> void:
+	_reset_buttons()
 	if (SceneManager.Get_Current_Scene() != SceneManager.SCENES.UPGRADE):
 		upgrade_scene.Setup_Upgrades()
 		SceneManager.Set_Current_Scene(SceneManager.SCENES.UPGRADE)
@@ -270,16 +370,16 @@ func _on_upgrade_button_pressed() -> void:
 func _on_attack_button_pressed() -> void:
 	if (_current_enemy and !_mission_completed):
 		_current_enemy.Take_Damage(DataManager.Get("power"))
-		_attack()
+		_check_defeated()
 
 func _on_inventory_open_button_pressed() -> void:
+	_reset_buttons()
 	if (SceneManager.Get_Current_Scene() != SceneManager.SCENES.INVENTORY):
 		SceneManager.Set_Current_Scene(SceneManager.SCENES.INVENTORY)
 		inventory_open_button.text = "Close Inventory"
 		_update_inventory_ui()
 	else:
 		SceneManager.Set_Current_Scene(SceneManager.SCENES.CLICK)
-		inventory_open_button.text = "Inventory"
 	_update_game_ui()
 
 func _on_sell_button_pressed():
@@ -299,9 +399,10 @@ func _on_equip_button_pressed():
 func _on_damage_timer_timeout() -> void:
 	if (_current_enemy != null and DataManager.Get("dps") > 0):
 		_current_enemy.Take_Damage(DataManager.Get("dps"))
-		_attack()
+		_check_defeated()
 
 func _on_reset_button_pressed():
+	game_won_screen.hide()
 	confirmation_screen.show()
 
 func _on_quit_button_pressed():
@@ -316,3 +417,19 @@ func _on_accept_restart_button_pressed():
 
 func _on_close_restart_button_pressed():
 	confirmation_screen.hide()
+
+func _on_redo_mission_button_pressed():
+	_reset_game()
+	mission_cleared_screen.hide()
+
+func _on_new_mission_button_pressed():
+	_on_mission_select_button_pressed()
+	mission_cleared_screen.hide()
+	final_boss_cleared_screen.hide()
+
+func _on_challange_mission_button_pressed():
+	DataManager.Set("difficulty", DataManager.Get("difficulty") + 1)
+	DataManager.unlocked_missions.clear()
+	DataManager.Set_Current_Mission(DataManager.missions[0])
+	DataManager.Save_Data()
+	get_tree().reload_current_scene()

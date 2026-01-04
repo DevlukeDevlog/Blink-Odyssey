@@ -3,11 +3,14 @@ extends Node
 signal update_ui
 @warning_ignore("unused_signal")
 signal select_equipment(selected_equipment: EquipmentTemplate)
+@warning_ignore("unused_signal")
+signal select_mission()
 
 const MAX_OFFLINE_SECONDS := 60 * 60 * 8 # 8 hours cap
 const SAVE_PATH := "user://savegame.json"
 const SAVE_VERSION := 1
 const OFFLINE_EFFICIENCY := 0.01 
+const FINAL_DIFFICULTY := 3
 
 var welcome_back_message := ""
 
@@ -18,8 +21,8 @@ var start_player_lv := 1
 var start_player_power := 1
 var start_idle_power := 0
 var start_player_gold := 0
-var start_difficulty := 1.0
-var start_planet := "planet_1"
+var start_difficulty := 1
+var start_mission := "Planet 1"
 
 # =====================================================
 # CURRENT VALUES
@@ -30,9 +33,10 @@ var current_idle_power := start_idle_power
 var current_equipment_power := 0
 var current_player_gold := start_player_gold
 var current_difficulty := start_difficulty
-var current_planet := start_planet
+var current_mission := start_mission
 var upgrade_multiplier := 1 # can be 1, 10, 100, 1000, or 0 for Max
 var last_active_time: int = 0
+var unlocked_missions: Array = ["Planet 1"]
 
 # =====================================================
 # LEVEL / UPGRADE SYSTEM (SAME THING)
@@ -63,6 +67,11 @@ var idle_upgrade_templates: Array[IdleTemplate] = []
 var idle_upgrades: Array[IdleTemplate] = []         
 
 # =====================================================
+# MISSIONS
+# =====================================================
+var missions: Array[MissionTemplate] = []         
+
+# =====================================================
 # GENERIC SET / GET
 # =====================================================
 func Set(property: String, value) -> void:
@@ -79,6 +88,8 @@ func Set(property: String, value) -> void:
 			current_idle_power = value
 		"power":
 			current_player_power = value
+		"difficulty":
+			current_difficulty = value
 	update_ui.emit()
 
 func Get(property: String):
@@ -95,6 +106,10 @@ func Get(property: String):
 			return upgrade_multiplier
 		"dps":
 			return current_idle_power
+		"difficulty":
+			return current_difficulty
+		"mission":
+			return current_mission
 	return null
 
 # =====================================================
@@ -105,8 +120,6 @@ func get_final_click_power() -> int:
 	scaled_player *= pow(level_power_growth, current_player_lv - 1)
 	
 	var total_power := scaled_player + current_equipment_power
-	total_power *= prestige_multiplier
-	total_power *= current_difficulty
 	
 	return max(1, int(floor(total_power)))
 
@@ -120,8 +133,6 @@ func Get_Player_Level_Up_Power() -> int:
 	scaled_simulated *= pow(level_power_growth, simulated_lv - 1)
 	
 	var simulated_final := scaled_simulated + current_equipment_power
-	simulated_final *= prestige_multiplier
-	simulated_final *= current_difficulty
 	
 	var simulated_int = max(1, int(floor(simulated_final)))
 	return max(1, simulated_int - current_final)
@@ -148,8 +159,6 @@ func Get_Player_Level_Up_Power_Batch(multiplier: int) -> int:
 
 		var scaled := float(temp_player_power) * pow(level_power_growth, temp_player_lv - 1)
 		var new_final := scaled + current_equipment_power
-		new_final *= prestige_multiplier
-		new_final *= current_difficulty
 
 		total_gain = max(1, int(floor(new_final))) - get_final_click_power()
 		
@@ -291,7 +300,7 @@ func Clear_Data() -> void:
 	current_player_power = start_player_power
 	current_player_gold = start_player_gold
 	current_difficulty = start_difficulty
-	current_planet = start_planet
+	current_mission = start_mission
 	
 	prestige_multiplier = 1.0
 	
@@ -308,7 +317,11 @@ func Save_Data() -> void:
 		"level": Get("level"),
 		"gold": Get("gold"),
 		"power": current_player_power,
+		"mission": current_mission,
+		"unlocked_missions": unlocked_missions,
+		"difficulty": current_difficulty
 	}
+	
 
 	save_data["inventory"] = Save_Equipment_List(inventory)
 	save_data["equipped"] = Save_Equipment_List(equiped_gear)
@@ -339,6 +352,9 @@ func Load_Data() -> void:
 	Set("level", p["level"])
 	Set("gold", p["gold"])
 	Set("power", p["power"])
+	current_mission = p["mission"]
+	unlocked_missions = p["unlocked_missions"]
+	current_difficulty = p["difficulty"]
 	
 	Load_Equipment(data)
 	Load_Upgrade_List(data)
@@ -456,6 +472,21 @@ func Load_Idle_List(data: Dictionary) -> void:
 				idle.idle_amount = entry["amount"]
 				idle.Update_Power()
 
+func Load_Missions(missions_templates: ResourceGroup) -> void:
+	missions.clear()
+	missions_templates.load_all_into(missions)
+
+func Set_Current_Mission(selected_mission: MissionTemplate) -> void:
+	var mission_index := missions.find(selected_mission)
+	current_mission = missions[mission_index].mission_name
+	
+	update_ui.emit()
+
+func Get_Current_Mission() -> MissionTemplate:
+	for mission in missions:
+		if (mission.mission_name == current_mission): return mission
+	return null
+
 func Apply_Offline_Progress(last_played: int) -> void:
 	var now := Time.get_unix_time_from_system()
 	var seconds_away = max(0, now - last_played)
@@ -503,11 +534,12 @@ func Reset_Game() -> void:
 	current_equipment_power = 0
 	current_player_gold = start_player_gold
 	current_difficulty = start_difficulty
-	current_planet = start_planet
+	current_mission = start_mission
 	upgrade_multiplier = 1
 	prestige_multiplier = 1.0
 	last_active_time = 0
 	welcome_back_message = ""
+	unlocked_missions = []
 
 	# =====================
 	# CLEAR INVENTORY / GEAR
