@@ -952,6 +952,71 @@ theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 16
 text = "Close"
 
+[node name="ConfirmationScreen" type="Panel" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ConfirmationScreen"]
+layout_mode = 2
+offset_right = 1120.0
+offset_bottom = 616.0
+theme_override_constants/margin_left = 350
+theme_override_constants/margin_top = 200
+theme_override_constants/margin_right = 350
+theme_override_constants/margin_bottom = 250
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/ConfirmationScreen/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("3_76v2p")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ConfirmationScreen/MarginContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ConfirmationScreen/MarginContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="OfflineEarningsLabel" type="Label" parent="MarginContainer/ConfirmationScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+texture_filter = 2
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 24
+text = "You want to start over?
+No turning back!"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ConfirmationScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="AcceptRestartButton" type="Button" parent="MarginContainer/ConfirmationScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+texture_filter = 2
+custom_minimum_size = Vector2(150, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("6_huasi")
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 16
+text = "Yes Restart!"
+
+[node name="CloseRestartButton" type="Button" parent="MarginContainer/ConfirmationScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+texture_filter = 2
+custom_minimum_size = Vector2(150, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("6_huasi")
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 16
+text = "Okay maybe not"
+
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/MissionBox/MarginContainer/VBoxContainer/MissionSelectButton" to="." method="_on_mission_select_button_pressed"]
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer/InventoryBox/MarginContainer/VBoxContainer/InventoryOpenButton" to="." method="_on_inventory_open_button_pressed"]
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/EnemyBox/MarginContainer/AttackButton" to="." method="_on_attack_button_pressed"]
@@ -966,6 +1031,8 @@ text = "Close"
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer/MaxButton" to="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene" method="_on_max_button_pressed"]
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/LowerInformation/UpgradeButton" to="." method="_on_upgrade_button_pressed"]
 [connection signal="pressed" from="MarginContainer/PopupScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="MarginContainer/ConfirmationScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/AcceptRestartButton" to="." method="_on_accept_restart_button_pressed"]
+[connection signal="pressed" from="MarginContainer/ConfirmationScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CloseRestartButton" to="." method="_on_close_restart_button_pressed"]
 
 [editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/PlayerUpgrades/PanelContainer/MarginContainer/PlayerUpgradesContainer/UpgradeSlot"]
 [editable path="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer2/VBoxContainer/EquipmentUpgrades/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/EquipmentUpgradesContainer/UpgradeSlot"]

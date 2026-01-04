@@ -35,6 +35,7 @@ extends Control
 # Popup UI
 @onready var popup_screen = %PopupScreen
 @onready var offline_earnings_label = %OfflineEarningsLabel
+@onready var confirmation_screen = %ConfirmationScreen
 
 # Scenes
 @onready var game_play_scene = %GamePlayScene
@@ -63,6 +64,7 @@ func _setup_game() -> void:
 	DataManager.Load_Idle_Templates(idle_upgrades)
 	DataManager.Create_Idle_Upgrades()
 	DataManager.Load_Data()
+	confirmation_screen.hide()
 	
 	_popup_ui()
 	
@@ -291,10 +293,17 @@ func _on_damage_timer_timeout() -> void:
 		_attack()
 
 func _on_reset_button_pressed():
-	DataManager.Reset_Game()
+	confirmation_screen.show()
 
 func _on_quit_button_pressed():
 	DataManager._on_about_to_quit()
 
 func _on_close_button_pressed():
 	popup_screen.hide()
+
+func _on_accept_restart_button_pressed():
+	DataManager.Reset_Game()
+	confirmation_screen.hide()
+
+func _on_close_restart_button_pressed():
+	confirmation_screen.hide()

@@ -471,7 +471,9 @@ func Apply_Offline_Progress(last_played: int) -> void:
 	var time_str = format_seconds(seconds_away)
 	
 	# Show welcome back message
-	welcome_back_message = str("Welcome back\nYou've been away for %s" % time_str,"\nYou earned ", FormatManager.format_number(earned), " Gold")
+	welcome_back_message = ""
+	if (earned > 0):
+		welcome_back_message = str("Welcome back\nYou've been away for %s" % time_str,"\nYou earned ", FormatManager.format_number(earned), " Gold")
 
 # Helper function to format seconds into hh:mm:ss
 func format_seconds(seconds: float) -> String:
@@ -505,6 +507,7 @@ func Reset_Game() -> void:
 	upgrade_multiplier = 1
 	prestige_multiplier = 1.0
 	last_active_time = 0
+	welcome_back_message = ""
 
 	# =====================
 	# CLEAR INVENTORY / GEAR
