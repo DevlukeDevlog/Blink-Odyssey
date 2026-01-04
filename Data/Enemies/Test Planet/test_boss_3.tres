@@ -7,11 +7,11 @@
 [resource]
 script = ExtResource("3_hayrs")
 enemy_type = 1
-enemy_name = "Test Final Boss"
+enemy_name = "Test Boss 3"
 enemy_base_max_health = 100
-enemy_weakness = 0
+enemy_weakness = 2
 enemy_base_min_reward = 100
 enemy_possible_equipment_drops = Array[ExtResource("1_xkrc0")]([])
-enemy_timer = 300
+enemy_timer = 150
 enemy_texture = ExtResource("2_1tvca")
 metadata/_custom_type_script = "uid://bnb77ygf1dd3i"

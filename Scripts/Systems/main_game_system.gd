@@ -18,6 +18,11 @@ extends Control
 @onready var enemy_texture: TextureRect = %EnemyTexture
 @onready var enemy_health_bar: ProgressBar = %EnemyHealthBar
 @onready var weakness_container = %WeaknessContainer
+@onready var boss_timer_bar = %BossTimerBar
+@onready var boss_timer: Timer = %BossTimer
+@onready var boss_timer_label = %BossTimerLabel
+@onready var boss_timer_bar_container = %BossTimerBarContainer
+@onready var rematch_boss_button = %RematchBossButton
 
 # Mission UI
 @onready var mission_log_label: RichTextLabel = %MissionLogLabel
@@ -42,6 +47,7 @@ extends Control
 @onready var confirmation_screen = %ConfirmationScreen
 @onready var mission_cleared_screen = %MissionClearedScreen
 @onready var final_boss_cleared_screen = %FinalBossClearedScreen
+@onready var game_lost_screen = %GameLostScreen
 
 # Scenes
 @onready var game_play_scene = %GamePlayScene
@@ -60,27 +66,43 @@ extends Control
 var _current_mission: MissionTemplate = null
 var _current_enemy: EnemyTemplate = null
 var _on_boss_battle := false
+var _boss_failed := false
 var _mission_completed := false
 var _selected_equipment: EquipmentTemplate = null
 var _damage_timer := Timer.new()
 
 func _ready() -> void:
 	SceneManager.Set_Current_Scene(SceneManager.SCENES.CLICK)
+	_load_game()
 	_setup_game()
 	DataManager.select_equipment.connect(_update_selected_equiment_ui)
 
-# Setups
-func _setup_game() -> void:
+func _process(_delta):
+	if (_on_boss_battle):
+		boss_timer_bar.value = boss_timer.time_left
+		boss_timer_label.text = "%.2f" % boss_timer.time_left
+	
+	if (_boss_failed and !_on_boss_battle and !rematch_boss_button.is_visible_in_tree()):
+		rematch_boss_button.show()
+
+func _load_game() -> void:
 	DataManager.Load_Equipment_Templates(equipment_list)
 	DataManager.Load_Idle_Templates(idle_upgrades)
 	DataManager.Load_Missions(all_missions)
 	DataManager.Create_Idle_Upgrades()
 	DataManager.Load_Data()
-	
+	_setup_signals()
+
+# Setups
+func _setup_game() -> void:
 	confirmation_screen.hide()
 	mission_cleared_screen.hide()
 	final_boss_cleared_screen.hide()
 	game_won_screen.hide()
+	game_lost_screen.hide()
+	mission_log_label.text = ""
+	
+	rematch_boss_button.hide()
 	
 	if (DataManager.Get_Current_Mission() == null and mission != null):
 		DataManager.Set_Current_Mission(mission)
@@ -94,11 +116,14 @@ func _setup_game() -> void:
 	
 	if (mission):
 		_current_mission = mission.duplicate()
-		_setup_signals()
+		
+		for i in DataManager.Get("progress"):
+			_current_mission.mission_enemies.pop_front()
 		
 		if (_current_mission.mission_enemies.size() > 0):
 			_setup_enemy(_current_mission.mission_enemies[0])
 		else:
+			DataManager.Set("progress", 0)
 			_on_boss_battle = true
 			_setup_enemy(_current_mission.mission_boss)
 		_update_game_ui()
@@ -106,11 +131,6 @@ func _setup_game() -> void:
 		_update_player_ui()
 		_update_gear_ui()
 		_update_selected_equiment_ui()
-		mission_log_label.text = ""
-		_damage_timer.timeout.connect(_on_damage_timer_timeout)
-		_damage_timer.wait_time = 1
-		_damage_timer.autostart = true
-		add_child(_damage_timer)
 	else:
 		printerr("No mission selected!")
 
@@ -121,6 +141,11 @@ func _setup_signals() -> void:
 	DataManager.update_ui.connect(_update_inventory_ui)
 	DataManager.update_ui.connect(upgrade_scene.Update_UI)
 	DataManager.select_mission.connect(_reset_game)
+	
+	_damage_timer.timeout.connect(_on_damage_timer_timeout)
+	_damage_timer.wait_time = 1
+	_damage_timer.autostart = true
+	add_child(_damage_timer)
 
 func _setup_enemy(enemy: EnemyTemplate) -> void:
 	var new_enemy := enemy.duplicate()
@@ -142,6 +167,9 @@ func _setup_enemy(enemy: EnemyTemplate) -> void:
 		weakness_container.add_child(weakness_icon)
 	
 	_current_enemy = new_enemy
+	
+	if (_on_boss_battle):
+		_start_boss_timer()
 
 # UI
 func _popup_ui() -> void:
@@ -159,9 +187,12 @@ func _update_enemy_ui() -> void:
 	enemy_health_bar.value = _current_enemy.enemy_current_health
 	
 	var current_mission_progress = mission.Get_Mission_Size() - _current_mission.Get_Mission_Size() + 1
+	DataManager.Set("progress", current_mission_progress - 1)
 	if (_on_boss_battle):
 		mission_progress_label.text = "Boss"
+		boss_timer_bar_container.show()
 	else:
+		boss_timer_bar_container.hide()
 		mission_progress_label.text = str(current_mission_progress, " / ", mission.Get_Mission_Size())
 
 func _update_player_ui() -> void:
@@ -220,7 +251,7 @@ func _update_selected_equiment_ui(selected_equipment: EquipmentTemplate = null) 
 		actions_inventory_container.visible = true
 
 func _update_game_ui() -> void:
-	var scene := SceneManager.Get_Current_Scene()
+	var scene: SceneManager.SCENES = SceneManager.Get_Current_Scene()
 	game_play_scene.show()
 	enemy_scene.hide()
 	missions_scene.hide()
@@ -249,10 +280,27 @@ func _update_mission_log_ui(add_text: String) -> void:
 	var current_log = mission_log_label.text
 	mission_log_label.text = str("- ", add_text, "\n", current_log)
 
+func _update_missions_ui() -> void:
+	for child in missions_container.get_children():
+		child.free()
+	
+	for data_mission in DataManager.missions:
+		if (data_mission.mission_enemies.size() == 0):
+			if (DataManager.FINAL_DIFFICULTY != DataManager.Get("difficulty")):
+				return
+		
+		var mission_button := ComponentsManager.MISSION_BUTTON.instantiate()
+		mission_button.mission = data_mission
+		mission_button.pressed.connect(_reset_buttons)
+		missions_container.add_child(mission_button)
+
 func _clear_enemy_ui() -> void:
 	enemy_texture.texture = null
 	enemy_name_label.text = ""
 	enemy_health_bar.visible = false
+	boss_timer.stop()
+	boss_timer_bar_container.hide()
+	
 	for child in weakness_container.get_children():
 		child.free()
 	
@@ -279,20 +327,6 @@ func _clear_enemy_ui() -> void:
 				DataManager.unlocked_missions.append(last_mission.mission_name)
 		mission_cleared_screen.show()
 
-func _update_missions_ui() -> void:
-	for child in missions_container.get_children():
-		child.free()
-	
-	for data_mission in DataManager.missions:
-		if (data_mission.mission_enemies.size() == 0):
-			if (DataManager.FINAL_DIFFICULTY != DataManager.Get("difficulty")):
-				return
-		
-		var mission_button := ComponentsManager.MISSION_BUTTON.instantiate()
-		mission_button.mission = data_mission
-		mission_button.pressed.connect(_reset_buttons)
-		missions_container.add_child(mission_button)
-
 # Helpers
 func _check_defeated() -> void:
 	if (_current_enemy.Is_Defeated()):
@@ -312,8 +346,11 @@ func _check_defeated() -> void:
 			_setup_enemy(enemies[0])
 			_current_mission.mission_enemies = enemies
 		elif (!_on_boss_battle):
-			_setup_enemy(_current_mission.mission_boss)
-			_on_boss_battle = true
+			if (_boss_failed):
+				_reset_game()
+			else:
+				_on_boss_battle = true
+				_setup_enemy(_current_mission.mission_boss)
 		else:
 			_current_enemy = null
 			_update_mission_log_ui(str("Mission Complete"))
@@ -322,9 +359,17 @@ func _check_defeated() -> void:
 		
 	_update_enemy_ui()
 
+func _start_boss_timer() -> void:
+	boss_timer.paused = false
+	boss_timer.start(_current_enemy.enemy_timer)
+	boss_timer_bar.max_value = _current_enemy.enemy_timer
+	boss_timer_bar.value = _current_enemy.enemy_timer
+
 func _reset_game() -> void:
-	if (_mission_completed):
-		_current_mission = DataManager.Get_Current_Mission().duplicate()
+	boss_timer.paused = false
+	if (_mission_completed or _boss_failed or DataManager.Get("progress") == 0):
+		mission = DataManager.Get_Current_Mission()
+		_current_mission = mission.duplicate()
 		_mission_completed = false
 		_on_boss_battle = false
 		
@@ -332,8 +377,9 @@ func _reset_game() -> void:
 		if (enemies.size() > 0):
 			_setup_enemy(_current_mission.mission_enemies[0])
 		else:
-			_setup_enemy(_current_mission.mission_boss)
+			_boss_failed = false
 			_on_boss_battle = true
+			_setup_enemy(_current_mission.mission_boss)
 	_update_enemy_ui()
 
 func _reset_buttons() -> void:
@@ -342,12 +388,14 @@ func _reset_buttons() -> void:
 
 # Buttons
 func _on_mission_select_button_pressed() -> void:
+	boss_timer.paused = true
 	_reset_buttons()
 	if (SceneManager.Get_Current_Scene() != SceneManager.SCENES.MISSIONS):
 		SceneManager.Set_Current_Scene(SceneManager.SCENES.MISSIONS)
 		mission_select_button.text = "Close Missions"
 		_update_missions_ui()
 	else:
+		boss_timer.paused = false
 		SceneManager.Set_Current_Scene(SceneManager.SCENES.CLICK)
 	_update_game_ui()
 
@@ -359,11 +407,13 @@ func _on_options_button_pressed() -> void:
 		options_button.text = "Options"
 
 func _on_upgrade_button_pressed() -> void:
+	boss_timer.paused = true
 	_reset_buttons()
 	if (SceneManager.Get_Current_Scene() != SceneManager.SCENES.UPGRADE):
 		upgrade_scene.Setup_Upgrades()
 		SceneManager.Set_Current_Scene(SceneManager.SCENES.UPGRADE)
 	else:
+		boss_timer.paused = false
 		SceneManager.Set_Current_Scene(SceneManager.SCENES.CLICK)
 	_update_game_ui()
 
@@ -373,12 +423,14 @@ func _on_attack_button_pressed() -> void:
 		_check_defeated()
 
 func _on_inventory_open_button_pressed() -> void:
+	boss_timer.paused = true
 	_reset_buttons()
 	if (SceneManager.Get_Current_Scene() != SceneManager.SCENES.INVENTORY):
 		SceneManager.Set_Current_Scene(SceneManager.SCENES.INVENTORY)
 		inventory_open_button.text = "Close Inventory"
 		_update_inventory_ui()
 	else:
+		boss_timer.paused = false
 		SceneManager.Set_Current_Scene(SceneManager.SCENES.CLICK)
 	_update_game_ui()
 
@@ -412,6 +464,7 @@ func _on_close_button_pressed():
 	popup_screen.hide()
 
 func _on_accept_restart_button_pressed():
+	mission_log_label.text = ""
 	DataManager.Reset_Game()
 	confirmation_screen.hide()
 
@@ -421,15 +474,32 @@ func _on_close_restart_button_pressed():
 func _on_redo_mission_button_pressed():
 	_reset_game()
 	mission_cleared_screen.hide()
+	game_lost_screen.hide()
 
 func _on_new_mission_button_pressed():
 	_on_mission_select_button_pressed()
 	mission_cleared_screen.hide()
+	game_lost_screen.hide()
 	final_boss_cleared_screen.hide()
 
 func _on_challange_mission_button_pressed():
 	DataManager.Set("difficulty", DataManager.Get("difficulty") + 1)
 	DataManager.unlocked_missions.clear()
 	DataManager.Set_Current_Mission(DataManager.missions[0])
+	DataManager.unlocked_missions.append(DataManager.Get_Current_Mission().mission_name)
 	DataManager.Save_Data()
-	get_tree().reload_current_scene()
+	final_boss_cleared_screen.hide()
+	_reset_game()
+
+func _on_boss_timer_timeout():
+	_boss_failed = true
+	boss_timer.stop()
+	game_lost_screen.show()
+
+func _on_rematch_boss_button_pressed():
+	_boss_failed = false
+	_on_boss_battle = true
+	rematch_boss_button.hide()
+	_current_mission.mission_enemies.clear()
+	_setup_enemy(_current_mission.mission_boss)
+	_update_enemy_ui()

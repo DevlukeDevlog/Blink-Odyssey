@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="MissionTemplate" load_steps=4 format=3 uid="uid://dhrew82hrrr27"]
 
-[ext_resource type="Resource" uid="uid://bywu1vy5ka0tb" path="res://Data/Enemies/Test Planet/test_boss_3.tres" id="1_okqqi"]
+[ext_resource type="Resource" uid="uid://n47l8aum320v" path="res://Data/Enemies/Test Planet/test_boss_final.tres" id="1_okqqi"]
 [ext_resource type="Script" uid="uid://bnb77ygf1dd3i" path="res://Scripts/Resources/enemy_template.gd" id="2_rpv87"]
 [ext_resource type="Script" uid="uid://16q82vg7uq8d" path="res://Scripts/Resources/mission_template.gd" id="3_j1364"]
 
@@ -11,6 +11,5 @@ mission_enemies = Array[ExtResource("2_rpv87")]([])
 mission_boss = ExtResource("1_okqqi")
 min_reward_multiplier = 1.0
 max_reward_multiplier = 1.5
-difficulty_size = 3
 difficulty_add_bonus = 0.2
 metadata/_custom_type_script = "uid://16q82vg7uq8d"

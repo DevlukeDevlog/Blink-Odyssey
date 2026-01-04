@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="MissionTemplate" load_steps=8 format=3 uid="uid://b1yhwkyds0mm2"]
 
-[ext_resource type="Resource" uid="uid://c5maryk7gsrpv" path="res://Data/Enemies/Test Planet/test_boss_2.tres" id="1_g1ppd"]
+[ext_resource type="Resource" uid="uid://bywu1vy5ka0tb" path="res://Data/Enemies/Test Planet/test_boss_3.tres" id="1_g1ppd"]
 [ext_resource type="Script" uid="uid://bnb77ygf1dd3i" path="res://Scripts/Resources/enemy_template.gd" id="2_v3ibb"]
 [ext_resource type="Resource" uid="uid://cyeyguppl13o8" path="res://Data/Enemies/Test Planet/test_enemy_1.tres" id="3_vw3s4"]
 [ext_resource type="Resource" uid="uid://bun2a2m4lf2sv" path="res://Data/Enemies/Test Planet/test_enemy_4.tres" id="4_sgpkj"]

@@ -34,6 +34,7 @@ var current_equipment_power := 0
 var current_player_gold := start_player_gold
 var current_difficulty := start_difficulty
 var current_mission := start_mission
+var current_mission_progress := 0
 var upgrade_multiplier := 1 # can be 1, 10, 100, 1000, or 0 for Max
 var last_active_time: int = 0
 var unlocked_missions: Array = ["Planet 1"]
@@ -84,12 +85,12 @@ func Set(property: String, value) -> void:
 			current_equipment_power = value
 		"multiplier":
 			upgrade_multiplier = value
-		"dps":
-			current_idle_power = value
 		"power":
 			current_player_power = value
 		"difficulty":
 			current_difficulty = value
+		"progress":
+			current_mission_progress = value
 	update_ui.emit()
 
 func Get(property: String):
@@ -105,16 +106,21 @@ func Get(property: String):
 		"multiplier":
 			return upgrade_multiplier
 		"dps":
-			return current_idle_power
+			return get_idle_power()
 		"difficulty":
 			return current_difficulty
 		"mission":
 			return current_mission
+		"progress":
+			return current_mission_progress
 	return null
 
-# =====================================================
-# FINAL CLICK POWER (GUARANTEED GROWTH)
-# =====================================================
+func get_idle_power() -> int:
+	var power := 0
+	for idle in idle_upgrades:
+		power += idle.idle_current_power
+	return power
+
 func get_final_click_power() -> int:
 	var scaled_player := float(current_player_power)
 	scaled_player *= pow(level_power_growth, current_player_lv - 1)
@@ -318,6 +324,7 @@ func Save_Data() -> void:
 		"gold": Get("gold"),
 		"power": current_player_power,
 		"mission": current_mission,
+		"mission_progress": Get("progress"),
 		"unlocked_missions": unlocked_missions,
 		"difficulty": current_difficulty
 	}
@@ -352,6 +359,8 @@ func Load_Data() -> void:
 	Set("level", p["level"])
 	Set("gold", p["gold"])
 	Set("power", p["power"])
+	Set("progress", p["mission_progress"])
+	
 	current_mission = p["mission"]
 	unlocked_missions = p["unlocked_missions"]
 	current_difficulty = p["difficulty"]
@@ -523,7 +532,7 @@ func _on_about_to_quit():
 func Save_Last_Active_Time():
 	last_active_time = int(Time.get_unix_time_from_system())
 	Save_Data()
-	get_tree().quit()
+	SceneManager.Set_Scene(SceneManager.START_SCENE)
 
 func Reset_Game() -> void:
 	# =====================
@@ -535,6 +544,7 @@ func Reset_Game() -> void:
 	current_player_gold = start_player_gold
 	current_difficulty = start_difficulty
 	current_mission = start_mission
+	current_mission_progress = 0
 	upgrade_multiplier = 1
 	prestige_multiplier = 1.0
 	last_active_time = 0
@@ -554,18 +564,10 @@ func Reset_Game() -> void:
 	for idle in idle_upgrades:
 		idle.idle_amount = 0
 		idle.Update_Power()
-
-	# =====================
-	# DELETE SAVE FILE
-	# =====================
-	if FileAccess.file_exists(SAVE_PATH):
-		DirAccess.remove_absolute(SAVE_PATH)
-
+	
+	Save_Data()
+	
 	update_ui.emit()
-
-	# =====================
-	# RELOAD CURRENT SCENE
-	# =====================
-	var tree := get_tree()
-	if tree:
-		tree.reload_current_scene()
+	
+	Save_Data()
+	SceneManager.Set_Scene(SceneManager.MAIN_SCENE)

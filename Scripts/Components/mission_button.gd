@@ -14,5 +14,6 @@ func Setup_Button() -> void:
 func _on_pressed():
 	if (DataManager.Get_Current_Mission() != mission):
 		DataManager.Set_Current_Mission(mission)
+		DataManager.Set("progress", 0)
 	DataManager.select_mission.emit()
 	SceneManager.Set_Current_Scene(SceneManager.SCENES.CLICK)

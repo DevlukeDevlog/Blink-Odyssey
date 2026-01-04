@@ -14,12 +14,7 @@ var idle_current_power := 0
 # POWER
 # =====================================================
 func Update_Power() -> void:
-	var current_dps = DataManager.Get("dps") - idle_current_power
 	idle_current_power = idle_amount * idle_base_power
-	var new_dps = DataManager.Get("dps") - idle_current_power
-	
-	var difference = current_dps - new_dps
-	DataManager.Set("dps", DataManager.Get("dps") + difference)
 
 func Get_Power() -> int:
 	return idle_current_power

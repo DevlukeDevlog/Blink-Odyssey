@@ -8,10 +8,10 @@
 script = ExtResource("3_o25wn")
 enemy_type = 1
 enemy_name = "Test Boss 2"
-enemy_base_max_health = 25
+enemy_base_max_health = 50
 enemy_weakness = 1
 enemy_base_min_reward = 100
 enemy_possible_equipment_drops = Array[ExtResource("1_5y557")]([])
-enemy_timer = 200
+enemy_timer = 100
 enemy_texture = ExtResource("2_7bgf6")
 metadata/_custom_type_script = "uid://bnb77ygf1dd3i"
