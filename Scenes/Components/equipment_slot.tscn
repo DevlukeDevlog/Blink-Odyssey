@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dlyf3e0iv77o2"]
+[gd_scene load_steps=6 format=3 uid="uid://dlyf3e0iv77o2"]
 
 [ext_resource type="Script" uid="uid://cvu1voy0pomo8" path="res://Scripts/Components/equipment_slot.gd" id="1_6qcv3"]
 [ext_resource type="Texture2D" uid="uid://dkoy7rxrlpl1j" path="res://Assets/Art/Test/equipment_slot_icon_placeholder.png" id="1_hni86"]
 [ext_resource type="Texture2D" uid="uid://b7ffce0emnjpx" path="res://Assets/Art/Test/equipment_slot_active_icon_placeholder.png" id="2_7uu3d"]
 [ext_resource type="Texture2D" uid="uid://bty3wf87usjom" path="res://Assets/Art/Test/equipment_slot_hover_icon_placeholder.png" id="2_adhjb"]
+[ext_resource type="Texture2D" uid="uid://dhy5e6flmouti" path="res://Assets/Art/Test/improved_up_placeholder.png" id="5_odn34"]
 
 [node name="EquipmentSlot" type="TextureButton"]
 custom_minimum_size = Vector2(32, 32)
@@ -29,6 +30,21 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="ImprovedIcon" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -8.0
+offset_bottom = 8.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("5_odn34")
+
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -49,4 +65,6 @@ theme_override_font_sizes/font_size = 12
 text = "E"
 horizontal_alignment = 2
 
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
 [connection signal="pressed" from="." to="." method="_on_pressed"]

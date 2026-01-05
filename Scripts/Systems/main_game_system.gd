@@ -36,6 +36,7 @@ extends Control
 @onready var equipment_grid_container = %EquipmentGridContainer
 @onready var actions_inventory_container = %ActionsInventoryContainer
 @onready var equip_button = %EquipButton
+@onready var sell_button = %SellButton
 
 # Options UI
 @onready var option_open_actions = %OptionOpenActions
@@ -69,6 +70,7 @@ var _on_boss_battle := false
 var _boss_failed := false
 var _mission_completed := false
 var _selected_equipment: EquipmentTemplate = null
+var _selected_quipment_array: Array[EquipmentTemplate] = []
 var _damage_timer := Timer.new()
 
 func _ready() -> void:
@@ -76,6 +78,7 @@ func _ready() -> void:
 	_load_game()
 	_setup_game()
 	DataManager.select_equipment.connect(_update_selected_equiment_ui)
+	DataManager.unselect_equipment.connect(_update_unselected_equiment_ui)
 
 func _process(_delta):
 	if (_on_boss_battle):
@@ -221,33 +224,73 @@ func _update_inventory_ui() -> void:
 		new_equipment_slot.in_inventory = true
 		new_equipment_slot.is_equiped = DataManager.Is_Equiped(equipment)
 		equipment_grid_container.add_child(new_equipment_slot)
+		if (_selected_quipment_array.size() == 0):
+			_update_selected_equiment_ui()
+		else:
+			_update_selected_equiment_ui(_selected_equipment)
+
+func _update_unselected_equiment_ui(selected_equipment: EquipmentTemplate = null) -> void:
+	if (_selected_quipment_array.has(selected_equipment)):
+		_selected_quipment_array.erase(selected_equipment)
+	
+	if (_selected_quipment_array.size() == 0):
+		_update_selected_equiment_ui()
+	else:
+		_selected_equipment = _selected_quipment_array[0]
+		_update_selected_equiment_ui(_selected_equipment)
 
 func _update_selected_equiment_ui(selected_equipment: EquipmentTemplate = null) -> void:
+	selected_equipment_label.show()
+	selected_equipment_information_label.show()
+	equip_button.show()
+	
+	if (Input.is_action_pressed("shift")):
+		if (!_selected_quipment_array.has(selected_equipment)):
+			_selected_quipment_array.append(selected_equipment)
+	else:
+		if (!_selected_quipment_array.has(selected_equipment)):
+			_selected_quipment_array.clear()
+			_selected_quipment_array.append(selected_equipment)
+	
 	var equipment_slots = equipment_grid_container.get_children()
 	for slots in equipment_slots as Array[EquipmentSLot]:
-		slots.disabled = false
+		if (!_selected_quipment_array.has(slots.equipment)):
+			slots.disabled = false
+		else:
+			slots.disabled = true
 	
 	if (selected_equipment == null):
 		selected_equipment_label.text = "Select item"
-		selected_equipment_information_label.text = ""
+		selected_equipment_information_label.text = "Hold Shift for multiselect\nRight Mouse Button for unselecting"
 		actions_inventory_container.visible = false
 	else:
-		_selected_equipment = selected_equipment
-		selected_equipment_label.text = str(_selected_equipment.equipment_name, " ", _selected_equipment.Get_Attribute_Name()) 
+		selected_equipment_label.hide()
+		selected_equipment_information_label.hide()
+		equip_button.hide()
+		sell_button.text = "Sell All"
 		
-		var improved_power_text := ""
-		
-		if (!DataManager.Is_Equiped(_selected_equipment)):
-			equip_button.text = "Equip"
-			var improved_power := DataManager.Calculate_Improved_Power(_selected_equipment)
-			if (improved_power < 0):
-				improved_power_text = str("[color=#B3261E]",FormatManager.format_number(improved_power) ," Once Equipped[/color]")
+		if (_selected_quipment_array.size() == 1):
+			selected_equipment_label.show()
+			selected_equipment_information_label.show()
+			equip_button.show()
+			sell_button.text = "Sell"
+			
+			_selected_equipment = selected_equipment
+			selected_equipment_label.text = str(_selected_equipment.equipment_name, " ", _selected_equipment.Get_Attribute_Name()) 
+			var improved_power_text := ""
+			
+			if (!DataManager.Is_Equiped(_selected_equipment)):
+				equip_button.text = "Equip"
+				var improved_power := DataManager.Calculate_Improved_Power(_selected_equipment)
+				if (improved_power < 0):
+					
+					improved_power_text = str("[color=#B3261E]",FormatManager.format_number(improved_power) ," Once Equipped[/color]")
+				else:
+					improved_power_text = str("[color=#1F7A1F]+",FormatManager.format_number(improved_power) ," Once Equipped[/color]")
 			else:
-				improved_power_text = str("[color=#1F7A1F]+",FormatManager.format_number(improved_power) ," Once Equipped[/color]")
-		else:
-			equip_button.text = "Unequip"
+				equip_button.text = "Unequip"
+			selected_equipment_information_label.text = str(FormatManager.format_number(_selected_equipment.equipment_current_attack_power), " Power\n", improved_power_text)
 		
-		selected_equipment_information_label.text = str(FormatManager.format_number(_selected_equipment.equipment_current_attack_power), " Power\n", improved_power_text)
 		actions_inventory_container.visible = true
 
 func _update_game_ui() -> void:
@@ -429,15 +472,18 @@ func _on_inventory_open_button_pressed() -> void:
 		SceneManager.Set_Current_Scene(SceneManager.SCENES.INVENTORY)
 		inventory_open_button.text = "Close Inventory"
 		_update_inventory_ui()
+		_update_selected_equiment_ui()
 	else:
 		boss_timer.paused = false
 		SceneManager.Set_Current_Scene(SceneManager.SCENES.CLICK)
 	_update_game_ui()
 
 func _on_sell_button_pressed():
-	DataManager.Delete_From_Inventory(_selected_equipment)
-	_selected_equipment.Sell_Equipment()
+	for equipment in _selected_quipment_array:
+		DataManager.Delete_From_Inventory(equipment)
+		equipment.Sell_Equipment()
 	_selected_equipment = null
+	_selected_quipment_array.clear()
 	_update_selected_equiment_ui()
 
 func _on_equip_button_pressed():

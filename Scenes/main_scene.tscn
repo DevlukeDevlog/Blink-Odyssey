@@ -251,6 +251,7 @@ vertical_alignment = 1
 
 [node name="ClickerScene" type="BoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 16
@@ -541,7 +542,6 @@ text = "- Found weapon
 
 [node name="InventoryScene" type="BoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -700,6 +700,7 @@ layout_mode = 2
 theme_override_constants/separation = 8
 
 [node name="SellButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer"]
+unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
 focus_mode = 0

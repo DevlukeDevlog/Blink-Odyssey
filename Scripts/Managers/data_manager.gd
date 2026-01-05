@@ -4,6 +4,8 @@ signal update_ui
 @warning_ignore("unused_signal")
 signal select_equipment(selected_equipment: EquipmentTemplate)
 @warning_ignore("unused_signal")
+signal unselect_equipment(selected_equipment: EquipmentTemplate)
+@warning_ignore("unused_signal")
 signal select_mission()
 
 const MAX_OFFLINE_SECONDS := 60 * 60 * 8 # 8 hours cap
