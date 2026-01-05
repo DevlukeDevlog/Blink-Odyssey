@@ -244,13 +244,14 @@ func _update_selected_equiment_ui(selected_equipment: EquipmentTemplate = null) 
 	selected_equipment_information_label.show()
 	equip_button.show()
 	
-	if (Input.is_action_pressed("shift")):
-		if (!_selected_quipment_array.has(selected_equipment)):
-			_selected_quipment_array.append(selected_equipment)
-	else:
-		if (!_selected_quipment_array.has(selected_equipment)):
-			_selected_quipment_array.clear()
-			_selected_quipment_array.append(selected_equipment)
+	if (selected_equipment != null):
+		if (Input.is_action_pressed("shift")):
+			if (!_selected_quipment_array.has(selected_equipment)):
+				_selected_quipment_array.append(selected_equipment)
+		else:
+			if (!_selected_quipment_array.has(selected_equipment)):
+				_selected_quipment_array.clear()
+				_selected_quipment_array.append(selected_equipment)
 	
 	var equipment_slots = equipment_grid_container.get_children()
 	for slots in equipment_slots as Array[EquipmentSLot]:
@@ -471,6 +472,7 @@ func _on_inventory_open_button_pressed() -> void:
 	if (SceneManager.Get_Current_Scene() != SceneManager.SCENES.INVENTORY):
 		SceneManager.Set_Current_Scene(SceneManager.SCENES.INVENTORY)
 		inventory_open_button.text = "Close Inventory"
+		_selected_quipment_array.clear()
 		_update_inventory_ui()
 		_update_selected_equiment_ui()
 	else:
