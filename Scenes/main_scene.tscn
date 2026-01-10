@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bvy50pyfmcs3v"]
+[gd_scene load_steps=22 format=3 uid="uid://bvy50pyfmcs3v"]
 
 [ext_resource type="Texture2D" uid="uid://be0u4714bpo2s" path="res://Assets/Art/Test/player_placeholder.png" id="1_52fb6"]
 [ext_resource type="FontFile" uid="uid://b6ruw17j2xoxj" path="res://Assets/Fonts/AndyBold.OTF" id="1_iacmt"]
@@ -6,7 +6,7 @@
 [ext_resource type="Resource" uid="uid://dsatql1dhotmk" path="res://Data/Missions/planet_2.tres" id="2_lhp3t"]
 [ext_resource type="Resource" uid="uid://bppsxnc21jib2" path="res://Data/IdleUpgrades.tres" id="3_7ewk0"]
 [ext_resource type="Theme" uid="uid://chweu1s0cwtc7" path="res://Assets/Themes/panel_placeholder.tres" id="3_76v2p"]
-[ext_resource type="Texture2D" uid="uid://twydswvdv708" path="res://Assets/Art/Test/background_placeholder.png" id="3_jv6wh"]
+[ext_resource type="Texture2D" uid="uid://twydswvdv708" path="res://Assets/Art/Test/background_placeholder_1.png" id="3_jv6wh"]
 [ext_resource type="Resource" uid="uid://b8k4hjy7buqvj" path="res://Data/Missions.tres" id="3_psl12"]
 [ext_resource type="Resource" uid="uid://dxdruj140uhi5" path="res://Data/EquipmentTemplates.tres" id="4_lhp3t"]
 [ext_resource type="Texture2D" uid="uid://dpg4o5v1ib18h" path="res://Assets/Art/Test/enemy_placeholder_1.png" id="4_x6ack"]
@@ -17,9 +17,16 @@
 [ext_resource type="PackedScene" uid="uid://dj5wvytfgregu" path="res://Scenes/Components/weakness_icon.tscn" id="11_gnsmo"]
 [ext_resource type="PackedScene" uid="uid://d0s0ljl3yflo0" path="res://Scenes/Components/upgrade_slot.tscn" id="12_drdnd"]
 [ext_resource type="Script" uid="uid://dmrxncry7byct" path="res://Scripts/Systems/upgrade_system.gd" id="12_ioaeq"]
+[ext_resource type="Theme" uid="uid://d6pnqcqsgw3e" path="res://Assets/Themes/progress_bar_timer_placeholder.tres" id="13_oyb3p"]
 [ext_resource type="PackedScene" uid="uid://dedqxbwuhyjuc" path="res://Scenes/Components/mission_button.tscn" id="14_2ebs2"]
+[ext_resource type="Theme" uid="uid://doyh41batt2bb" path="res://Assets/Themes/progress_bar_health_placeholder.tres" id="15_jvnna"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ia5b"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
 
 [node name="MainScene" type="Control"]
 layout_mode = 3
@@ -85,7 +92,7 @@ size_flags_horizontal = 0
 theme_override_constants/separation = 8
 
 [node name="PlayerInformationBox" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/LeftBoxContainer"]
-custom_minimum_size = Vector2(250, 0)
+custom_minimum_size = Vector2(250, 220)
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("3_76v2p")
@@ -251,7 +258,6 @@ vertical_alignment = 1
 
 [node name="ClickerScene" type="BoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 16
@@ -291,6 +297,7 @@ focus_mode = 0
 mouse_filter = 1
 
 [node name="BackgroundTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton"]
+unique_name_in_owner = true
 layout_mode = 2
 offset_right = 274.0
 offset_bottom = 385.0
@@ -307,11 +314,22 @@ grow_vertical = 2
 theme_override_constants/margin_top = 32
 theme_override_constants/margin_bottom = 32
 
-[node name="EnemyTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton/BackgroundTexture/MarginContainer"]
-unique_name_in_owner = true
+[node name="Control" type="Control" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton/BackgroundTexture/MarginContainer"]
 layout_mode = 2
+mouse_filter = 2
+
+[node name="EnemyTexture" type="TextureRect" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton/BackgroundTexture/MarginContainer/Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(137, 160.5)
+size_flags_horizontal = 4
+size_flags_vertical = 4
 texture = ExtResource("4_x6ack")
-expand_mode = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton"]
 layout_mode = 1
@@ -328,9 +346,20 @@ layout_mode = 2
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iacmt")
 text = "Grifindor"
+
+[node name="DifficultyLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+texture_filter = 2
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iacmt")
+text = "Difficulty: A"
+horizontal_alignment = 1
 
 [node name="MissionProgressLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/CenterBoxContainer/PanelContainer/MarginContainer/EnemyScene/AttackButton/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
@@ -358,6 +387,7 @@ layout_mode = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
+theme = ExtResource("13_oyb3p")
 value = 50.0
 show_percentage = false
 
@@ -382,6 +412,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
 size_flags_vertical = 10
+theme = ExtResource("15_jvnna")
 step = 1.0
 value = 50.0
 show_percentage = false
@@ -542,6 +573,7 @@ text = "- Found weapon
 
 [node name="InventoryScene" type="BoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -699,6 +731,16 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 
+[node name="SelectAllButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer"]
+unique_name_in_owner = true
+texture_filter = 2
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("6_huasi")
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 16
+text = "Select All"
+
 [node name="SellButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer"]
 unique_name_in_owner = true
 texture_filter = 2
@@ -728,32 +770,44 @@ theme_override_constants/separation = 8
 script = ExtResource("12_ioaeq")
 slot_template = ExtResource("12_drdnd")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene"]
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("3_76v2p")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/PanelContainer/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="X1Button" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer"]
+[node name="X1Button" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/PanelContainer/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 theme = ExtResource("6_huasi")
 text = "X 1"
 
-[node name="X10Button" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer"]
+[node name="X10Button" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/PanelContainer/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 theme = ExtResource("6_huasi")
 text = "X 10"
 
-[node name="X100Button" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer"]
+[node name="X100Button" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/PanelContainer/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 theme = ExtResource("6_huasi")
 text = "X 100"
 
-[node name="MaxButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer"]
+[node name="MaxButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/PanelContainer/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
@@ -992,10 +1046,21 @@ layout_mode = 2
 text = "Bought: 1
 Idle: 35 P/s"
 
-[node name="LowerInformation" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_76v2p")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="LowerInformation" type="HBoxContainer" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="GoldLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/LowerInformation"]
+[node name="GoldLabel" type="Label" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/LowerInformation"]
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 2
@@ -1004,7 +1069,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iacmt")
 text = "100 Gold"
 
-[node name="UpgradeButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/LowerInformation"]
+[node name="UpgradeButton" type="Button" parent="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/LowerInformation"]
 unique_name_in_owner = true
 texture_filter = 2
 custom_minimum_size = Vector2(100, 0)
@@ -1234,9 +1299,11 @@ size_flags_vertical = 3
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 24
-text = "You cleared all missions!
-Want to redo a mission?
-Or try again but harder?"
+text = "Super the boss dropped
+the key to the portal !!
+(Enter the portal will take you back.
+But on a higher difficulty)
+"
 horizontal_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/FinalBossClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
@@ -1264,7 +1331,74 @@ focus_mode = 0
 theme = ExtResource("6_huasi")
 theme_override_fonts/font = ExtResource("1_iacmt")
 theme_override_font_sizes/font_size = 16
-text = "Take on the challenge"
+text = "Enter Portal"
+
+[node name="FinalBossAlmostClearedScreen" type="Panel" parent="MarginContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/FinalBossAlmostClearedScreen"]
+layout_mode = 2
+offset_right = 1120.0
+offset_bottom = 616.0
+theme_override_constants/margin_left = 350
+theme_override_constants/margin_top = 180
+theme_override_constants/margin_right = 350
+theme_override_constants/margin_bottom = 250
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/FinalBossAlmostClearedScreen/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("3_76v2p")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/FinalBossAlmostClearedScreen/MarginContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/FinalBossAlmostClearedScreen/MarginContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/FinalBossAlmostClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+texture_filter = 2
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 24
+text = "Ooh no!
+The boss didn't drop the key
+To the next portal!!"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/FinalBossAlmostClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="NewMissionButton" type="Button" parent="MarginContainer/FinalBossAlmostClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+texture_filter = 2
+custom_minimum_size = Vector2(150, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("6_huasi")
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 16
+text = "Check Missions"
+
+[node name="RedoMissionButton" type="Button" parent="MarginContainer/FinalBossAlmostClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+texture_filter = 2
+custom_minimum_size = Vector2(150, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("6_huasi")
+theme_override_fonts/font = ExtResource("1_iacmt")
+theme_override_font_sizes/font_size = 16
+text = "Redo Mission"
 
 [node name="GameWonScreen" type="Panel" parent="MarginContainer"]
 unique_name_in_owner = true
@@ -1409,13 +1543,14 @@ unique_name_in_owner = true
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/RightBoxContainer/SettingsBox/MarginContainer/VBoxContainer/OptionsButton" to="." method="_on_options_button_pressed"]
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/RightBoxContainer/SettingsBox/MarginContainer/VBoxContainer/OptionOpenActions/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/ClickerScene/RightBoxContainer/SettingsBox/MarginContainer/VBoxContainer/OptionOpenActions/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer/SelectAllButton" to="." method="_on_select_all_button_pressed"]
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer/SellButton" to="." method="_on_sell_button_pressed"]
 [connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/GamePlayScene/InventoryScene/VBoxContainer/DownBoxContainer/InfoEquipmentBox/MarginContainer/VBoxContainer/ActionsInventoryContainer/EquipButton" to="." method="_on_equip_button_pressed"]
-[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer/X1Button" to="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene" method="_on_x_1_button_pressed"]
-[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer/X10Button" to="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene" method="_on_x_10_button_pressed"]
-[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer/X100Button" to="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene" method="_on_x_100_button_pressed"]
-[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/HBoxContainer/MaxButton" to="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene" method="_on_max_button_pressed"]
-[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/LowerInformation/UpgradeButton" to="." method="_on_upgrade_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/PanelContainer/MarginContainer/HBoxContainer/X1Button" to="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene" method="_on_x_1_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/PanelContainer/MarginContainer/HBoxContainer/X10Button" to="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene" method="_on_x_10_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/PanelContainer/MarginContainer/HBoxContainer/X100Button" to="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene" method="_on_x_100_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene/PanelContainer/MarginContainer/HBoxContainer/MaxButton" to="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/UpgradeScene" method="_on_max_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/LowerInformation/UpgradeButton" to="." method="_on_upgrade_button_pressed"]
 [connection signal="pressed" from="MarginContainer/PopupScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]
 [connection signal="pressed" from="MarginContainer/ConfirmationScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/AcceptRestartButton" to="." method="_on_accept_restart_button_pressed"]
 [connection signal="pressed" from="MarginContainer/ConfirmationScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CloseRestartButton" to="." method="_on_close_restart_button_pressed"]
@@ -1423,6 +1558,8 @@ unique_name_in_owner = true
 [connection signal="pressed" from="MarginContainer/MissionClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/NewMissionButton" to="." method="_on_new_mission_button_pressed"]
 [connection signal="pressed" from="MarginContainer/FinalBossClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/NewMissionButton" to="." method="_on_new_mission_button_pressed"]
 [connection signal="pressed" from="MarginContainer/FinalBossClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ChallangeMissionButton" to="." method="_on_challange_mission_button_pressed"]
+[connection signal="pressed" from="MarginContainer/FinalBossAlmostClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/NewMissionButton" to="." method="_on_new_mission_button_pressed"]
+[connection signal="pressed" from="MarginContainer/FinalBossAlmostClearedScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/RedoMissionButton" to="." method="_on_redo_mission_button_pressed"]
 [connection signal="pressed" from="MarginContainer/GameWonScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="pressed" from="MarginContainer/GameWonScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="pressed" from="MarginContainer/GameLostScreen/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/RedoMissionButton" to="." method="_on_redo_mission_button_pressed"]

@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://d0s0ljl3yflo0"]
 
 [ext_resource type="PackedScene" uid="uid://di50pwofnotxb" path="res://Scenes/Components/upgrade_button.tscn" id="1_g0p64"]
-[ext_resource type="Theme" uid="uid://chweu1s0cwtc7" path="res://Assets/Themes/panel_placeholder.tres" id="1_tu7e0"]
+[ext_resource type="Theme" uid="uid://dhtxcyt410k0i" path="res://Assets/Themes/panel2_placeholder.tres" id="1_jhatt"]
 [ext_resource type="Script" uid="uid://de048kehr55m5" path="res://Scripts/Components/upgrade_slot.gd" id="2_jhatt"]
 [ext_resource type="PackedScene" uid="uid://ck37rgq04pm6p" path="res://Scenes/Components/sell_button.tscn" id="2_tu7e0"]
 [ext_resource type="PackedScene" uid="uid://r8x8rwxwlapa" path="res://Scenes/Components/item_slot.tscn" id="3_83xnw"]
@@ -11,7 +11,7 @@ custom_minimum_size = Vector2(420, 75)
 offset_right = 416.0
 offset_bottom = 66.0
 size_flags_horizontal = 0
-theme = ExtResource("1_tu7e0")
+theme = ExtResource("1_jhatt")
 script = ExtResource("2_jhatt")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]

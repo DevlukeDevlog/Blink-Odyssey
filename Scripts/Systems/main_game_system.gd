@@ -5,6 +5,8 @@ extends Control
 @onready var gold_label: Label = %GoldLabel
 @onready var mission_label: Label = %MissionLabel
 @onready var inventory_size_label: Label = %InventorySizeLabel
+@onready var difficulty_label = %DifficultyLabel
+@onready var background_texture = %BackgroundTexture
 
 # Player's UI
 @onready var level_label: Label = %LevelLabel
@@ -37,6 +39,7 @@ extends Control
 @onready var actions_inventory_container = %ActionsInventoryContainer
 @onready var equip_button = %EquipButton
 @onready var sell_button = %SellButton
+@onready var select_all_button = %SelectAllButton
 
 # Options UI
 @onready var option_open_actions = %OptionOpenActions
@@ -48,6 +51,7 @@ extends Control
 @onready var confirmation_screen = %ConfirmationScreen
 @onready var mission_cleared_screen = %MissionClearedScreen
 @onready var final_boss_cleared_screen = %FinalBossClearedScreen
+@onready var final_boss_almost_cleared_screen = %FinalBossAlmostClearedScreen
 @onready var game_lost_screen = %GameLostScreen
 
 # Scenes
@@ -60,6 +64,7 @@ extends Control
 @onready var game_won_screen = %GameWonScreen
 
 @export var mission: MissionTemplate = null
+@export var key_drop_chance := 0.15
 @export var all_missions: ResourceGroup = null
 @export var idle_upgrades: ResourceGroup = null
 @export var equipment_list: ResourceGroup = null
@@ -72,6 +77,8 @@ var _mission_completed := false
 var _selected_equipment: EquipmentTemplate = null
 var _selected_quipment_array: Array[EquipmentTemplate] = []
 var _damage_timer := Timer.new()
+var _enemy_tween: Tween = null
+var _is_enemy_defeated := false
 
 func _ready() -> void:
 	SceneManager.Set_Current_Scene(SceneManager.SCENES.CLICK)
@@ -164,6 +171,7 @@ func _setup_enemy(enemy: EnemyTemplate) -> void:
 	for child in weakness_container.get_children():
 		child.free()
 	
+	_is_enemy_defeated = false
 	if (new_enemy.enemy_weakness != new_enemy.ENEMY_WEAKNESS.NONE):
 		var weakness_icon := ComponentsManager.WEAKNESS_ICON.instantiate()
 		weakness_icon.enemy = new_enemy
@@ -245,6 +253,7 @@ func _update_selected_equiment_ui(selected_equipment: EquipmentTemplate = null) 
 	equip_button.show()
 	
 	if (selected_equipment != null):
+		select_all_button.hide()
 		if (Input.is_action_pressed("shift")):
 			if (!_selected_quipment_array.has(selected_equipment)):
 				_selected_quipment_array.append(selected_equipment)
@@ -261,19 +270,27 @@ func _update_selected_equiment_ui(selected_equipment: EquipmentTemplate = null) 
 			slots.disabled = true
 	
 	if (selected_equipment == null):
+		select_all_button.text = "Select All"
+		select_all_button.show()
 		selected_equipment_label.text = "Select item"
 		selected_equipment_information_label.text = "Hold Shift for multiselect\nRight Mouse Button for unselecting"
-		actions_inventory_container.visible = false
+		sell_button.hide()
+		equip_button.hide()
 	else:
+		select_all_button.text = "Unselect All"
+		select_all_button.show()
+		sell_button.text = "Sell All"
+		sell_button.show()
 		selected_equipment_label.hide()
 		selected_equipment_information_label.hide()
 		equip_button.hide()
-		sell_button.text = "Sell All"
 		
 		if (_selected_quipment_array.size() == 1):
+			select_all_button.hide()
 			selected_equipment_label.show()
 			selected_equipment_information_label.show()
 			equip_button.show()
+			sell_button.show()
 			sell_button.text = "Sell"
 			
 			_selected_equipment = selected_equipment
@@ -291,8 +308,6 @@ func _update_selected_equiment_ui(selected_equipment: EquipmentTemplate = null) 
 			else:
 				equip_button.text = "Unequip"
 			selected_equipment_information_label.text = str(FormatManager.format_number(_selected_equipment.equipment_current_attack_power), " Power\n", improved_power_text)
-		
-		actions_inventory_container.visible = true
 
 func _update_game_ui() -> void:
 	var scene: SceneManager.SCENES = SceneManager.Get_Current_Scene()
@@ -319,6 +334,10 @@ func _update_game_ui() -> void:
 	mission_label.text = DataManager.Get("mission")
 	gold_label.text = str(FormatManager.format_number(DataManager.Get("gold")), " Gold")
 	inventory_size_label.text = str(FormatManager.format_number(DataManager.inventory.size()), " Items")
+	difficulty_label.text = str("Difficulty: ", DataManager.Get("difficulty name"))
+	
+	if (_current_mission):
+		background_texture.texture = _current_mission.mission_background_texture
 
 func _update_mission_log_ui(add_text: String) -> void:
 	var current_log = mission_log_label.text
@@ -362,7 +381,11 @@ func _clear_enemy_ui() -> void:
 	var last_mission := available_missions.back() as MissionTemplate
 	if (_current_mission.mission_name == last_mission.mission_name):
 		if (_current_mission.mission_enemies.size() > 0):
-			final_boss_cleared_screen.show()
+			var chance := randf()
+			if (chance < key_drop_chance):
+				final_boss_cleared_screen.show()
+			else:
+				final_boss_almost_cleared_screen.show()
 		else:
 			game_won_screen.show()
 	else:
@@ -374,6 +397,9 @@ func _clear_enemy_ui() -> void:
 # Helpers
 func _check_defeated() -> void:
 	if (_current_enemy.Is_Defeated()):
+		_update_enemy_ui()
+		_is_enemy_defeated = true
+		await _play_enemy_death_animation()
 		var enemies := _current_mission.mission_enemies
 		if (_on_boss_battle):
 			_update_mission_log_ui(str("Boss Defeated"))
@@ -426,6 +452,51 @@ func _reset_game() -> void:
 			_setup_enemy(_current_mission.mission_boss)
 	_update_enemy_ui()
 
+func _play_enemy_hurt_animation() -> void:
+	if enemy_texture == null or !_current_enemy:
+		return
+	
+	# Stop previous tween safely
+	if _enemy_tween and _enemy_tween.is_running():
+		_enemy_tween.kill()
+	
+	_enemy_tween = create_tween()
+	_enemy_tween.set_trans(Tween.TRANS_SINE)
+	_enemy_tween.set_ease(Tween.EASE_OUT)
+	
+	_enemy_tween.tween_property(enemy_texture, "rotation", deg_to_rad(-6), 0.05)
+	_enemy_tween.tween_property(enemy_texture, "rotation", deg_to_rad(6), 0.1)
+	_enemy_tween.tween_property(enemy_texture, "rotation", 0.0, 0.05)
+	
+	_enemy_tween.parallel().tween_property(
+		enemy_texture,
+		"scale",
+		Vector2(1.05, 0.95),
+		0.1
+	)
+	
+	_enemy_tween.tween_property(enemy_texture, "scale", Vector2.ONE, 0.1)
+
+func _play_enemy_death_animation() -> void:
+	if enemy_texture == null:
+		return
+	
+	if _enemy_tween and _enemy_tween.is_running():
+		_enemy_tween.kill()
+	
+	_enemy_tween = create_tween()
+	_enemy_tween.set_trans(Tween.TRANS_BACK)
+	_enemy_tween.set_ease(Tween.EASE_OUT)
+	
+	_enemy_tween.tween_property(enemy_texture, "scale", Vector2(1.1, 1.1), 0.15)
+	_enemy_tween.tween_property(enemy_texture, "scale", Vector2.ZERO, 0.2)
+	
+	await _enemy_tween.finished
+	
+	# Reset for next enemy
+	enemy_texture.scale = Vector2.ONE
+	enemy_texture.rotation = 0.0
+
 func _reset_buttons() -> void:
 	inventory_open_button.text = "Inventory"
 	mission_select_button.text = "Missions"
@@ -462,8 +533,9 @@ func _on_upgrade_button_pressed() -> void:
 	_update_game_ui()
 
 func _on_attack_button_pressed() -> void:
-	if (_current_enemy and !_mission_completed):
+	if (_current_enemy and !_mission_completed and !_is_enemy_defeated):
 		_current_enemy.Take_Damage(DataManager.Get("power"))
+		_play_enemy_hurt_animation()
 		_check_defeated()
 
 func _on_inventory_open_button_pressed() -> void:
@@ -498,7 +570,9 @@ func _on_equip_button_pressed():
 
 func _on_damage_timer_timeout() -> void:
 	if (_current_enemy != null and DataManager.Get("dps") > 0):
+		if (_is_enemy_defeated) : return
 		_current_enemy.Take_Damage(DataManager.Get("dps"))
+		_play_enemy_hurt_animation()
 		_check_defeated()
 
 func _on_reset_button_pressed():
@@ -522,6 +596,7 @@ func _on_close_restart_button_pressed():
 func _on_redo_mission_button_pressed():
 	_reset_game()
 	mission_cleared_screen.hide()
+	final_boss_almost_cleared_screen.hide()
 	game_lost_screen.hide()
 
 func _on_new_mission_button_pressed():
@@ -529,6 +604,7 @@ func _on_new_mission_button_pressed():
 	mission_cleared_screen.hide()
 	game_lost_screen.hide()
 	final_boss_cleared_screen.hide()
+	final_boss_almost_cleared_screen.hide()
 
 func _on_challange_mission_button_pressed():
 	DataManager.Set("difficulty", DataManager.Get("difficulty") + 1)
@@ -551,3 +627,16 @@ func _on_rematch_boss_button_pressed():
 	_current_mission.mission_enemies.clear()
 	_setup_enemy(_current_mission.mission_boss)
 	_update_enemy_ui()
+
+func _on_select_all_button_pressed():
+	if (_selected_quipment_array.size() > 0):
+		_selected_quipment_array.clear()
+		_update_selected_equiment_ui()
+	else:
+		_selected_equipment = null
+		for slot in equipment_grid_container.get_children() as Array[EquipmentSLot]:
+			if (!slot.is_equiped):
+				_selected_quipment_array.append(slot.equipment)
+		
+		_selected_equipment = _selected_quipment_array[0]
+		_update_selected_equiment_ui(_selected_quipment_array[0])

@@ -12,7 +12,7 @@ const MAX_OFFLINE_SECONDS := 60 * 60 * 8 # 8 hours cap
 const SAVE_PATH := "user://savegame.json"
 const SAVE_VERSION := 1
 const OFFLINE_EFFICIENCY := 0.01 
-const FINAL_DIFFICULTY := 3
+const FINAL_DIFFICULTY := 6
 
 var welcome_back_message := ""
 
@@ -111,11 +111,24 @@ func Get(property: String):
 			return get_idle_power()
 		"difficulty":
 			return current_difficulty
+		"difficulty name":
+			return get_difficulty_name()
 		"mission":
 			return current_mission
 		"progress":
 			return current_mission_progress
 	return null
+
+func get_difficulty_name() -> String:
+	match Get("difficulty"):
+		1: return "C"
+		2: return "B"
+		3: return "A"
+		4: return "S1"
+		5: return "S2"
+		6: return "S3"
+	
+	return ""
 
 func get_idle_power() -> int:
 	var power := 0

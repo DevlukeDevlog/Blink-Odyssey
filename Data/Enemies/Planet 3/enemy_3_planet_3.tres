@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="EnemyTemplate" load_steps=8 format=3 uid="uid://dmo75fgtxx4tm"]
+
+[ext_resource type="Script" uid="uid://bc56friqt0408" path="res://Scripts/Resources/equipment_template.gd" id="1_dxmyg"]
+[ext_resource type="Resource" uid="uid://dwbqviql2oism" path="res://Data/Equipment/test_boot_dark.tres" id="2_6y1bj"]
+[ext_resource type="Resource" uid="uid://ch5hcrebdalk3" path="res://Data/Equipment/test_helmet_dark.tres" id="3_axdw6"]
+[ext_resource type="Resource" uid="uid://c4lsk3po61w4u" path="res://Data/Equipment/test_boot_light.tres" id="4_axlmw"]
+[ext_resource type="Resource" uid="uid://dqpedu0tqybx4" path="res://Data/Equipment/test_helmet_light.tres" id="5_nm653"]
+[ext_resource type="Texture2D" uid="uid://dpg4o5v1ib18h" path="res://Assets/Art/Test/enemy_placeholder_1.png" id="6_icajj"]
+[ext_resource type="Script" uid="uid://bnb77ygf1dd3i" path="res://Scripts/Resources/enemy_template.gd" id="7_67duk"]
+
+[resource]
+script = ExtResource("7_67duk")
+enemy_type = 0
+enemy_name = "Test 3"
+enemy_base_max_health = 30
+enemy_weakness = 2
+enemy_base_min_reward = 40
+enemy_possible_equipment_drops = Array[ExtResource("1_dxmyg")]([ExtResource("2_6y1bj"), ExtResource("3_axdw6"), ExtResource("4_axlmw"), ExtResource("5_nm653")])
+enemy_timer = 0
+enemy_texture = ExtResource("6_icajj")
+metadata/_custom_type_script = "uid://bnb77ygf1dd3i"

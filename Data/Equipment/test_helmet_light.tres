@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EquipmentTemplate" load_steps=3 format=3 uid="uid://dqpedu0tqybx4"]
+
+[ext_resource type="Texture2D" uid="uid://boagmrj264udl" path="res://Assets/Art/Test/equipment_helmet_icon_placeholder.png" id="1_6fpxg"]
+[ext_resource type="Script" uid="uid://bc56friqt0408" path="res://Scripts/Resources/equipment_template.gd" id="2_vm007"]
+
+[resource]
+script = ExtResource("2_vm007")
+equipment_type = 1
+equipment_attribute = 3
+equipment_name = "Test Helmet Light"
+equipment_sell_price = 100
+equipment_min_multiplier_attack = 1.0
+equipment_max_multiplier_attack = 1.5
+equipment_base_attack_power = 2
+equipment_base_upgrade_cost = 10
+equipment_drop_chance = 0.02
+equipment_icon_texture = ExtResource("1_6fpxg")
+metadata/_custom_type_script = "uid://bc56friqt0408"

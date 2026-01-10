@@ -4,6 +4,7 @@ extends Resource
 @export var mission_name := "Mission Name"
 @export var mission_enemies: Array[EnemyTemplate] = []
 @export var mission_boss: EnemyTemplate = null
+@export var mission_background_texture: Texture2D = Texture2D.new()
 @export var unlock_mission: MissionTemplate = null
 @export var min_reward_multiplier := 1.0
 @export var max_reward_multiplier := 1.1

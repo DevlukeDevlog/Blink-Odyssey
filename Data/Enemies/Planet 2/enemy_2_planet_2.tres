@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EnemyTemplate" load_steps=6 format=3 uid="uid://bun2a2m4lf2sv"]
+
+[ext_resource type="Script" uid="uid://bc56friqt0408" path="res://Scripts/Resources/equipment_template.gd" id="1_fcnxn"]
+[ext_resource type="Resource" uid="uid://dwdpp7igvvx1s" path="res://Data/Equipment/test_suit_fire.tres" id="2_eldck"]
+[ext_resource type="Resource" uid="uid://c2mhkel6i4igj" path="res://Data/Equipment/test_weapon_fire.tres" id="3_hhone"]
+[ext_resource type="Texture2D" uid="uid://bcycsfoka5ofu" path="res://Assets/Art/Test/enemy_placeholder_2.png" id="4_biiqs"]
+[ext_resource type="Script" uid="uid://bnb77ygf1dd3i" path="res://Scripts/Resources/enemy_template.gd" id="5_p4dc8"]
+
+[resource]
+script = ExtResource("5_p4dc8")
+enemy_type = 0
+enemy_name = "Test 2"
+enemy_base_max_health = 15
+enemy_weakness = 1
+enemy_base_min_reward = 25
+enemy_possible_equipment_drops = Array[ExtResource("1_fcnxn")]([ExtResource("2_eldck"), ExtResource("3_hhone")])
+enemy_timer = 0
+enemy_texture = ExtResource("4_biiqs")
+metadata/_custom_type_script = "uid://bnb77ygf1dd3i"

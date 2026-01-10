@@ -1,19 +1,27 @@
-[gd_resource type="Resource" script_class="MissionTemplate" load_steps=9 format=3 uid="uid://dsatql1dhotmk"]
+[gd_resource type="Resource" script_class="MissionTemplate" load_steps=16 format=3 uid="uid://dsatql1dhotmk"]
 
 [ext_resource type="Script" uid="uid://bnb77ygf1dd3i" path="res://Scripts/Resources/enemy_template.gd" id="1_1tyos"]
-[ext_resource type="Resource" uid="uid://c5maryk7gsrpv" path="res://Data/Enemies/Test Planet/test_boss_2.tres" id="1_48mbw"]
+[ext_resource type="Resource" uid="uid://c5maryk7gsrpv" path="res://Data/Enemies/Planet 2/boss_planet_2.tres" id="1_s7mut"]
+[ext_resource type="Texture2D" uid="uid://yr8qgn4wp6ee" path="res://Assets/Art/Test/background_placeholder_2.png" id="1_y5fr4"]
 [ext_resource type="Script" uid="uid://16q82vg7uq8d" path="res://Scripts/Resources/mission_template.gd" id="2_gdrfg"]
-[ext_resource type="Resource" uid="uid://oqlncw1sooep" path="res://Data/Enemies/Test Planet/test_enemy_3.tres" id="3_48mbw"]
-[ext_resource type="Resource" uid="uid://cyeyguppl13o8" path="res://Data/Enemies/Test Planet/test_enemy_1.tres" id="3_65yxj"]
-[ext_resource type="Resource" uid="uid://bun2a2m4lf2sv" path="res://Data/Enemies/Test Planet/test_enemy_4.tres" id="4_65yxj"]
-[ext_resource type="Resource" uid="uid://cfh88dl2a2fti" path="res://Data/Enemies/Test Planet/test_enemy_2.tres" id="4_r477l"]
+[ext_resource type="Resource" uid="uid://oqlncw1sooep" path="res://Data/Enemies/Planet 2/enemy_1_planet_2.tres" id="3_y5fr4"]
+[ext_resource type="Resource" uid="uid://bun2a2m4lf2sv" path="res://Data/Enemies/Planet 2/enemy_2_planet_2.tres" id="4_yvbij"]
+[ext_resource type="Resource" uid="uid://ctdeggnq1kyea" path="res://Data/Enemies/Planet 2/enemy_3_planet_2.tres" id="5_iadwg"]
+[ext_resource type="Resource" uid="uid://bvejol4707mxf" path="res://Data/Enemies/Planet 2/enemy_4_planet_2.tres" id="6_86stk"]
+[ext_resource type="Resource" uid="uid://d1305r032uccu" path="res://Data/Enemies/Planet 2/enemy_5_planet_2.tres" id="7_e756u"]
+[ext_resource type="Resource" uid="uid://d15r7ihvu4ujg" path="res://Data/Enemies/Planet 2/enemy_6_planet_2.tres" id="8_87ki0"]
 [ext_resource type="Resource" uid="uid://b1yhwkyds0mm2" path="res://Data/Missions/planet_3.tres" id="8_2615w"]
+[ext_resource type="Resource" uid="uid://cyqwrjuojpbtm" path="res://Data/Enemies/Planet 2/enemy_7_planet_2.tres" id="9_2s5gp"]
+[ext_resource type="Resource" uid="uid://obcp7qydi7ev" path="res://Data/Enemies/Planet 2/enemy_8_planet_2.tres" id="10_yv33u"]
+[ext_resource type="Resource" uid="uid://ch3ush1rdu8ih" path="res://Data/Enemies/Planet 2/enemy_9_planet_2.tres" id="11_ipgvl"]
+[ext_resource type="Resource" uid="uid://c1fmwmyu2afr0" path="res://Data/Enemies/Planet 2/enemy_10_planet_2.tres" id="12_5v16a"]
 
 [resource]
 script = ExtResource("2_gdrfg")
 mission_name = "Planet 2"
-mission_enemies = Array[ExtResource("1_1tyos")]([ExtResource("3_65yxj"), ExtResource("4_65yxj"), ExtResource("3_48mbw"), ExtResource("4_r477l"), ExtResource("3_65yxj"), ExtResource("4_65yxj"), ExtResource("3_48mbw"), ExtResource("4_65yxj"), ExtResource("4_r477l"), ExtResource("4_65yxj")])
-mission_boss = ExtResource("1_48mbw")
+mission_enemies = Array[ExtResource("1_1tyos")]([ExtResource("3_y5fr4"), ExtResource("4_yvbij"), ExtResource("5_iadwg"), ExtResource("6_86stk"), ExtResource("7_e756u"), ExtResource("8_87ki0"), ExtResource("9_2s5gp"), ExtResource("10_yv33u"), ExtResource("11_ipgvl"), ExtResource("12_5v16a")])
+mission_boss = ExtResource("1_s7mut")
+mission_background_texture = ExtResource("1_y5fr4")
 unlock_mission = ExtResource("8_2615w")
 min_reward_multiplier = 1.0
 max_reward_multiplier = 1.5

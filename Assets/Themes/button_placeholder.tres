@@ -3,7 +3,7 @@
 [ext_resource type="FontFile" uid="uid://b6ruw17j2xoxj" path="res://Assets/Fonts/AndyBold.OTF" id="1_efloj"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6wic1"]
-bg_color = Color(0.894923, 0.894922, 0.894922, 1)
+bg_color = Color(0.877616, 0.877616, 0.877615, 1)
 border_width_bottom = 2
 border_color = Color(0.699654, 0.699654, 0.699653, 1)
 corner_radius_top_left = 5
@@ -17,9 +17,9 @@ expand_margin_bottom = 2.0
 anti_aliasing = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_efloj"]
-bg_color = Color(0.728822, 0.728822, 0.728822, 1)
+bg_color = Color(1, 1, 1, 1)
 border_width_bottom = 2
-border_color = Color(0.65834, 0.65834, 0.65834, 1)
+border_color = Color(0.791999, 0.791999, 0.791999, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -31,7 +31,7 @@ expand_margin_bottom = 2.0
 anti_aliasing = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tjcuu"]
-bg_color = Color(0.74978, 0.74978, 0.74978, 1)
+bg_color = Color(0.886262, 0.886261, 0.886262, 1)
 border_width_top = 2
 border_color = Color(1, 1, 1, 0)
 corner_radius_top_left = 5
