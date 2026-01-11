@@ -17,6 +17,8 @@ Incremental Adventure is a **clicker + idle** prototype where players:
 
 The game is designed to be **fun, incremental, and rewarding**, offering a loop of **click → upgrade → unlock → repeat**.
 
+https://github.com/user-attachments/assets/b609958b-386c-436c-a4bb-c9e2825d7560
+
 ---
 
 ## ⚙️ Game Features
